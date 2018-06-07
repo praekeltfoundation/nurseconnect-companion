@@ -1,4 +1,5 @@
 defmodule Companion.Application do
+  @moduledoc false
   use Application
 
   # See https://hexdocs.pm/elixir/Application.html
@@ -11,7 +12,7 @@ defmodule Companion.Application do
       # Start the Ecto repository
       supervisor(Companion.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(CompanionWeb.Endpoint, []),
+      supervisor(CompanionWeb.Endpoint, [])
       # Start your own worker by calling: Companion.Worker.start_link(arg1, arg2, arg3)
       # worker(Companion.Worker, [arg1, arg2, arg3]),
     ]

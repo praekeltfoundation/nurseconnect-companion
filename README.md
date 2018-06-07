@@ -15,4 +15,4 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 To run the tests:
   * Setup the development environment
-  * Run the tests with `mix test`
+  * Run the tests with `mix test --cover`
