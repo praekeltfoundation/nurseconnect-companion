@@ -19,6 +19,9 @@ jobs:
 
     - elixir: '1.6'
       otp_release: '20.3'
+      env:
+        # Env var to differentiate between builds in travis CI
+        - RUN_DIALYZER=1
       cache:
         directories:
           - $HOME/.mix
