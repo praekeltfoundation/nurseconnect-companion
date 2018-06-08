@@ -20,8 +20,10 @@ defmodule CompanionWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", CompanionWeb do
-  #   pipe_through :api
-  # end
+  scope "/auth", CompanionWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :new
+  end
 end
