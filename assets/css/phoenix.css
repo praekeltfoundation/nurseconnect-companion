@@ -28,6 +28,7 @@ body, form, ul, table {
   margin-bottom: 30px;
 }
 
-h1 {
+/* Centering class */
+.center {
   text-align: center;
 }

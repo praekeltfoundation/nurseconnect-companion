@@ -36,4 +36,12 @@ defmodule CompanionWeb.AuthControllerTest do
 
     assert get_session(conn, :user) == nil
   end
+
+  test "Login page contains link to login with Google auth", %{conn: conn} do
+    conn =
+      conn
+      |> get("/auth/login")
+
+      assert html_response(conn, 200) =~ "Sign in with Google"
+  end
 end

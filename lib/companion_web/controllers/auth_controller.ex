@@ -16,4 +16,8 @@ defmodule CompanionWeb.AuthController do
     |> put_flash(:error, "Sign in failed")
     |> redirect(to: "/")
   end
+
+  def login(conn, _params) do
+    render(conn, "login.html")
+  end
 end
