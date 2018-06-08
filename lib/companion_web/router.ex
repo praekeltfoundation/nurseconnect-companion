@@ -13,9 +13,13 @@ defmodule CompanionWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :logged_in do
+    plug CompanionWeb.Plugs.RequireLoggedIn, "/auth/login"
+  end
+
   scope "/", CompanionWeb do
     # Use the default browser stack
-    pipe_through :browser
+    pipe_through [:browser, :logged_in]
 
     get "/", PageController, :index
   end

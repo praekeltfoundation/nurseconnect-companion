@@ -42,6 +42,6 @@ defmodule CompanionWeb.AuthControllerTest do
       conn
       |> get("/auth/login")
 
-      assert html_response(conn, 200) =~ "Sign in with Google"
+    assert html_response(conn, 200) =~ "Sign in with Google"
   end
 end
