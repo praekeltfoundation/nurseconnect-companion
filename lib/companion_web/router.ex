@@ -24,6 +24,6 @@ defmodule CompanionWeb.Router do
     pipe_through :browser
 
     get "/:provider", AuthController, :request
-    get "/:provider/callback", AuthController, :new
+    get "/:provider/callback", AuthController, :callback
   end
 end
