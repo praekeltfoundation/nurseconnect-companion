@@ -6,11 +6,19 @@ defmodule Companion.Mixfile do
       app: :companion,
       version: "0.0.1",
       elixir: "~> 1.4",
-      elixirc_paths: elixirc_paths(Mix.env),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers,
-      start_permanent: Mix.env == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.json": :test,
+        "coveralls.detail": :test,
+        credo: :test
+      ],
+      dialyzer: dialyzer(),
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
@@ -26,7 +34,7 @@ defmodule Companion.Mixfile do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
   #
@@ -40,7 +48,12 @@ defmodule Companion.Mixfile do
       {:phoenix_html, "~> 2.10"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"}
+      {:cowboy, "~> 1.0"},
+
+      # Dev/test/build tools.
+      {:excoveralls, "~> 0.8", only: :test},
+      {:dialyxir, "~> 0.5", only: :dev, runtime: false},
+      {:credo, "~> 0.9", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -54,7 +67,28 @@ defmodule Companion.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+    ]
+  end
+
+  defp dialyzer do
+    [
+      # There are some warnings in the generated code that we don't control, so
+      # we put them in the ignore file. The exact details of the warnings may
+      # change when we regenerate the code, so the ignore file should be
+      # updated to match.
+      ignore_warnings: "dialyzer.ignore-warnings",
+      # These are most of the optional warnings in the dialyzer docs. We skip
+      # :error_handling (because we don't care about functions that only raise
+      # exceptions) and two others that are intended for developing dialyzer
+      # itself.
+      flags: [
+        :unmatched_returns,
+        # The dialyzer docs indicate that the race condition check can
+        # sometimes take a whole lot of time.
+        :race_conditions,
+        :underspecs
+      ]
     ]
   end
 end

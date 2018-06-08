@@ -1,4 +1,6 @@
 # NurseConnect Companion
+[![Build Status](https://travis-ci.org/praekeltfoundation/nurseconnect-companion.svg?branch=develop)](https://travis-ci.org/praekeltfoundation/nurseconnect-companion)
+[![codecov](https://codecov.io/gh/praekeltfoundation/nurseconnect-companion/branch/develop/graph/badge.svg)](https://codecov.io/gh/praekeltfoundation/nurseconnect-companion)
 
 A companion application to run tasks that we cannot inside of RapidPro
 
@@ -15,4 +17,4 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 To run the tests:
   * Setup the development environment
-  * Run the tests with `mix test`
+  * Run the tests with `mix test --cover`

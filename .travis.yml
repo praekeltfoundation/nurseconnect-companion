@@ -1,0 +1,38 @@
+language: elixir
+
+
+script:
+  # This is basically `mix test` with coverage enabled.
+  - mix coveralls.json
+  - mix format --check-formatted
+  # This will mention FIXME and TODO comments without failing, any other issue
+  # fails the build.
+  - mix credo
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+jobs:
+  include:
+    - elixir: '1.6'
+      otp_release: '20.3'
+
+    - elixir: '1.6'
+      otp_release: '20.3'
+      env:
+        # Env var to differentiate between builds in travis CI
+        - RUN_DIALYZER=1
+      cache:
+        directories:
+          - $HOME/.mix
+          - $HOME/.pltcache
+      before_script:
+        - mix compile
+        # Juggle cached PLTs.
+        - mkdir -p ~/.pltcache
+        - cp ~/.pltcache/*-dev.plt _build/dev/ || true
+        - travis_wait mix dialyzer --plt
+        - cp _build/dev/*-dev.plt ~/.pltcache/
+        # Now that we've done the PLT dance, we can run dialyzer.
+      script:
+        - mix dialyzer --halt-exit-status
