@@ -30,7 +30,7 @@
             <div class="navbar-nav ml-auto">
               <a class="nav-item nav-link" href="/auth/logout">Logout</a>
             </div>
-            <%= end %>
+            <% end %>
           </div>
         </nav>
       </header>

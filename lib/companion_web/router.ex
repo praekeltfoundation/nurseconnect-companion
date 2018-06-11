@@ -14,6 +14,7 @@ defmodule CompanionWeb.Router do
   end
 
   pipeline :logged_in do
+    plug CompanionWeb.Plugs.ExtractUserFromSession
     plug CompanionWeb.Plugs.RequireLoggedIn, "/auth/login"
   end
 

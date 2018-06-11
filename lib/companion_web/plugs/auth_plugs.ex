@@ -7,15 +7,31 @@ defmodule CompanionWeb.Plugs.RequireLoggedIn do
 
   def init(default), do: default
 
-  def call(conn, url) do
-    case get_session(conn, :user) do
-      nil ->
-        conn
-        |> redirect(to: url)
-        |> halt
+  def call(%{assigns: %{user: nil}} = conn, url) do
+    conn
+    |> redirect(to: url)
+    |> halt
+  end
 
-      _ ->
-        conn
-    end
+  def call(%{assigns: %{user: _user}} = conn, _url) do
+    conn
+  end
+end
+
+defmodule CompanionWeb.Plugs.ExtractUserFromSession do
+  @moduledoc """
+  Extracts the user from the session and puts it on the conn
+  """
+  import Plug.Conn
+
+  def init(default), do: default
+
+  def call(%{assigns: %{user: _user}} = conn, _) do
+    # If there's already a user, then don't overwrite
+    conn
+  end
+
+  def call(conn, _) do
+    assign(conn, :user, get_session(conn, :user))
   end
 end

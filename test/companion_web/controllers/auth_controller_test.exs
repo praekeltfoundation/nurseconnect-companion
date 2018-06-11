@@ -7,6 +7,8 @@ defmodule CompanionWeb.AuthControllerTest do
     provider: "google"
   }
 
+  @user %{email: "test@example.org", provider: "google"}
+
   test "redirects user to Google for authentication", %{conn: conn} do
     conn = get(conn, "/auth/google")
     assert redirected_to(conn, 302)
@@ -20,10 +22,7 @@ defmodule CompanionWeb.AuthControllerTest do
 
     assert get_flash(conn, :info) == "Successfully signed in!"
 
-    assert get_session(conn, :user) == %{
-             email: @ueberauth_auth.info.email,
-             provider: @ueberauth_auth.provider
-           }
+    assert get_session(conn, :user) == @user
 
     assert redirected_to(conn) == "/"
   end
@@ -63,10 +62,16 @@ defmodule CompanionWeb.AuthControllerTest do
     assert html_response(conn, 200) =~ "Sign in with Google"
   end
 
-  test "Logout page removes user from session" do
+  test "Logout page removes user from session", %{conn: conn} do
     conn =
-      session_conn()
-      |> put_session(:user, %{email: "test@example.org", provider: "google"})
+      conn
+      |> assign(:ueberauth_auth, @ueberauth_auth)
+      |> get("/auth/google/callback")
+
+    assert get_session(conn, :user) == @user
+
+    conn =
+      conn
       |> get("/auth/logout")
 
     assert get_flash(conn, :info) == "Successfully logged out"
