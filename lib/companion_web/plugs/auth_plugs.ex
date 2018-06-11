@@ -7,9 +7,9 @@ defmodule CompanionWeb.Plugs.RequireLoggedIn do
 
   def init(default), do: default
 
-  def call(%{assigns: %{user: nil}} = conn, url) do
+  def call(%{assigns: %{user: nil}} = conn, auth_url) do
     conn
-    |> redirect(to: url)
+    |> redirect(to: auth_url)
     |> halt
   end
 
