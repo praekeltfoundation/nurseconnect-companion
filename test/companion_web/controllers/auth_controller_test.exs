@@ -2,7 +2,7 @@ defmodule CompanionWeb.AuthControllerTest do
   use CompanionWeb.ConnCase
 
   @ueberauth_auth %{
-    credentials: %{token: "aifoejwaofjaowj34"},
+    credentials: %{token: "pretendthisisavalidtoken"},
     info: %{email: "test@example.org", urls: %{website: "example.org"}},
     provider: :google
   }
