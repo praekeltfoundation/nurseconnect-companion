@@ -4,7 +4,7 @@ defmodule CompanionWeb.AuthControllerTest do
   @ueberauth_auth %{
     credentials: %{token: "pretendthisisavalidtoken"},
     info: %{email: "test@example.org", urls: %{website: "example.org"}},
-    provider: :google
+    provider: "google"
   }
 
   test "redirects user to Google for authentication", %{conn: conn} do
@@ -22,7 +22,7 @@ defmodule CompanionWeb.AuthControllerTest do
 
     assert get_session(conn, :user) == %{
              email: @ueberauth_auth.info.email,
-             provider: :google
+             provider: @ueberauth_auth.provider
            }
 
     assert redirected_to(conn) == "/"
