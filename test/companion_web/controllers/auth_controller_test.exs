@@ -24,6 +24,8 @@ defmodule CompanionWeb.AuthControllerTest do
              email: @ueberauth_auth.info.email,
              provider: :google
            }
+
+    assert redirected_to(conn) == "/"
   end
 
   test "doesn't log use in if Google auth fails", %{conn: conn} do
@@ -35,6 +37,7 @@ defmodule CompanionWeb.AuthControllerTest do
     assert get_flash(conn, :error) == "Sign in failed"
 
     assert get_session(conn, :user) == nil
+    assert redirected_to(conn) == "/"
   end
 
   test "doesn't log user in if incorrect domain", %{conn: conn} do
@@ -49,6 +52,7 @@ defmodule CompanionWeb.AuthControllerTest do
     assert get_flash(conn, :error) == "Sign in failed. Invalid domain"
 
     assert get_session(conn, :user) == nil
+    assert redirected_to(conn) == "/"
   end
 
   test "Login page contains link to login with Google auth", %{conn: conn} do
@@ -57,5 +61,16 @@ defmodule CompanionWeb.AuthControllerTest do
       |> get("/auth/login")
 
     assert html_response(conn, 200) =~ "Sign in with Google"
+  end
+
+  test "Logout page removes user from session" do
+    conn =
+      session_conn()
+      |> put_session(:user, %{email: "test@example.org", provider: "google"})
+      |> get("/auth/logout")
+
+    assert get_flash(conn, :info) == "Successfully logged out"
+    assert redirected_to(conn) == "/"
+    assert get_session(conn, :user) == nil
   end
 end

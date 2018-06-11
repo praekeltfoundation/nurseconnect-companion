@@ -25,6 +25,13 @@ defmodule CompanionWeb.AuthController do
   end
 
   def login(conn, _params) do
-    render(conn, "login.html")
+    render(conn, "login.html", user: get_session(conn, :user))
+  end
+
+  def logout(conn, _params) do
+    conn
+    |> clear_session()
+    |> put_flash(:info, "Successfully logged out")
+    |> redirect(to: "/")
   end
 end

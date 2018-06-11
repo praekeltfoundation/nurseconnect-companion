@@ -6,7 +6,7 @@ defmodule CompanionWeb.PageControllerTest do
     assert redirected_to(conn, 302) == "/auth/login"
   end
 
-  test "Logged in shows page", %{conn: conn} do
+  test "Logged in shows page" do
     conn =
       session_conn()
       |> put_session(:user, %{email: "foo@example.org", provider: :google})
