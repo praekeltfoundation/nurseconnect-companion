@@ -17,3 +17,8 @@ config :companion, Companion.Repo,
   database: "companion_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :ueberauth, Ueberauth,
+  providers: [
+    google: {Ueberauth.Strategy.Google, [hd: "example.org"]}
+  ]

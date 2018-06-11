@@ -7,7 +7,7 @@
         # The default glob pattern matching doesn't match files starting with a '.'
         included:
           ["config/", "lib/", "test/", "*.exs"] ++ Path.wildcard(".*.exs", match_dot: true),
-        excluded: ["test/support"]
+        excluded: []
       },
       checks: [
         # Don't fail on TODOs and FIXMEs for now
