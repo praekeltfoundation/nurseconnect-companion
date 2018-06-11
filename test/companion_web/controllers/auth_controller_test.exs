@@ -3,7 +3,7 @@ defmodule CompanionWeb.AuthControllerTest do
 
   @ueberauth_auth %{
     credentials: %{token: "aifoejwaofjaowj34"},
-    info: %{email: "test@example.org"},
+    info: %{email: "test@example.org", urls: %{website: "example.org"}},
     provider: :google
   }
 
@@ -33,6 +33,20 @@ defmodule CompanionWeb.AuthControllerTest do
       |> get("/auth/google/callback")
 
     assert get_flash(conn, :error) == "Sign in failed"
+
+    assert get_session(conn, :user) == nil
+  end
+
+  test "doesn't log user in if incorrect domain", %{conn: conn} do
+    # Domain is set to example.org in test config
+    auth = %{@ueberauth_auth | info: %{email: "test@bad.com", urls: %{website: "bad.com"}}}
+
+    conn =
+      conn
+      |> assign(:ueberauth_auth, auth)
+      |> get("/auth/google/callback")
+
+    assert get_flash(conn, :error) == "Sign in failed. Invalid domain"
 
     assert get_session(conn, :user) == nil
   end

@@ -1,4 +1,7 @@
 defmodule CompanionWeb.Plugs.RequireLoggedIn do
+  @moduledoc """
+  A plug that if there's no `user` in the session, redirects to the specified `url`
+  """
   import Plug.Conn
   import Phoenix.Controller
 

@@ -24,7 +24,7 @@ config :logger, :console,
 # Config Google OAuth
 config :ueberauth, Ueberauth,
   providers: [
-    google: {Ueberauth.Strategy.Google, []}
+    google: {Ueberauth.Strategy.Google, [hd: System.get_env("GOOGLE_DOMAIN")]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.Google.OAuth,

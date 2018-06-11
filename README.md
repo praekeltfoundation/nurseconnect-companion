@@ -22,6 +22,7 @@ To run the tests:
 Environment config:
 `GOOGLE_CLIENT_ID` - Client ID for Google OAuth
 `GOOGLE_CLIENT_SECRET` - Secret for Google OAuth
+`GOOGLE_DOMAIN` - The domain to limit sign in to
 `HOST` - Hostname of the service
 `SECRET_KEY` - Secure secret key for the service
 `DATABASE_URL` - URL to connect to the database
