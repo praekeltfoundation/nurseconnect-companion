@@ -38,6 +38,25 @@ defmodule Companion.CompanionWeb do
   def get_application!(id), do: Repo.get!(Application, id)
 
   @doc """
+  Gets an application by the token.
+
+  ## Examples
+
+      iex> get_application_by_token("example-token")
+      %Application{}
+
+      iex> get_application_by_token("bad-token")
+      nil
+
+  """
+  def get_application_by_token(token) do
+    case Ecto.UUID.cast(token) do
+      {:ok, token} -> Repo.get_by(Application, token: token)
+      :error -> nil
+    end
+  end
+
+  @doc """
   Creates a application.
 
   ## Examples
