@@ -22,7 +22,8 @@ defmodule CompanionWeb.Router do
     # Use the default browser stack
     pipe_through [:browser, :logged_in]
 
-    get "/", PageController, :index
+    get "/", ApplicationController, :index
+    resources "/applications", ApplicationController
   end
 
   scope "/auth", CompanionWeb do
