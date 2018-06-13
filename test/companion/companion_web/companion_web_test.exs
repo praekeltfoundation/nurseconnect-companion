@@ -65,4 +65,64 @@ defmodule Companion.CompanionWebTest do
       assert %Ecto.Changeset{} = CompanionWeb.change_application(application)
     end
   end
+
+  describe "optouts" do
+    alias Companion.CompanionWeb.OptOut
+
+    @valid_attrs %{contact_id: "7488a646-e31f-11e4-aace-600308960662"}
+    @update_attrs %{contact_id: "7488a646-e31f-11e4-aace-600308960668"}
+    @invalid_attrs %{contact_id: nil}
+
+    def opt_out_fixture(attrs \\ %{}) do
+      {:ok, opt_out} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> CompanionWeb.create_opt_out()
+
+      opt_out
+    end
+
+    test "list_optouts/0 returns all optouts" do
+      opt_out = opt_out_fixture()
+      assert CompanionWeb.list_optouts() == [opt_out]
+    end
+
+    test "get_opt_out!/1 returns the opt_out with given id" do
+      opt_out = opt_out_fixture()
+      assert CompanionWeb.get_opt_out!(opt_out.id) == opt_out
+    end
+
+    test "create_opt_out/1 with valid data creates a opt_out" do
+      assert {:ok, %OptOut{} = opt_out} = CompanionWeb.create_opt_out(@valid_attrs)
+      assert opt_out.contact_id == "7488a646-e31f-11e4-aace-600308960662"
+    end
+
+    test "create_opt_out/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = CompanionWeb.create_opt_out(@invalid_attrs)
+    end
+
+    test "update_opt_out/2 with valid data updates the opt_out" do
+      opt_out = opt_out_fixture()
+      assert {:ok, opt_out} = CompanionWeb.update_opt_out(opt_out, @update_attrs)
+      assert %OptOut{} = opt_out
+      assert opt_out.contact_id == "7488a646-e31f-11e4-aace-600308960668"
+    end
+
+    test "update_opt_out/2 with invalid data returns error changeset" do
+      opt_out = opt_out_fixture()
+      assert {:error, %Ecto.Changeset{}} = CompanionWeb.update_opt_out(opt_out, @invalid_attrs)
+      assert opt_out == CompanionWeb.get_opt_out!(opt_out.id)
+    end
+
+    test "delete_opt_out/1 deletes the opt_out" do
+      opt_out = opt_out_fixture()
+      assert {:ok, %OptOut{}} = CompanionWeb.delete_opt_out(opt_out)
+      assert_raise Ecto.NoResultsError, fn -> CompanionWeb.get_opt_out!(opt_out.id) end
+    end
+
+    test "change_opt_out/1 returns a opt_out changeset" do
+      opt_out = opt_out_fixture()
+      assert %Ecto.Changeset{} = CompanionWeb.change_opt_out(opt_out)
+    end
+  end
 end

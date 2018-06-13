@@ -29,6 +29,7 @@ defmodule CompanionWeb.Router do
 
     get "/", ApplicationController, :index
     resources "/applications", ApplicationController, only: [:create, :delete]
+    resources "/optouts", OptOutController, only: [:index]
   end
 
   scope "/auth", CompanionWeb do
@@ -44,5 +45,6 @@ defmodule CompanionWeb.Router do
     pipe_through [:api, :authenticated]
 
     get "/", ApiRootController, :index
+    resources "/optouts", OptOutController, only: [:create, :show]
   end
 end

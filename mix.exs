@@ -51,6 +51,8 @@ defmodule Companion.Mixfile do
       {:cowboy, "~> 1.0"},
       {:ueberauth, "~> 0.4"},
       {:ueberauth_google, "~> 0.7"},
+      {:timex, "~> 3.0"},
+      {:kerosene, "~> 0.7.0"},
 
       # Dev/test/build tools.
       {:excoveralls, "~> 0.8", only: :test},
