@@ -57,7 +57,7 @@ defmodule Companion.CompanionWeb do
   end
 
   @doc """
-  Creates a application.
+  Creates an application.
 
   ## Examples
 
@@ -75,7 +75,7 @@ defmodule Companion.CompanionWeb do
   end
 
   @doc """
-  Updates a application.
+  Updates an application.
 
   ## Examples
 
@@ -93,7 +93,7 @@ defmodule Companion.CompanionWeb do
   end
 
   @doc """
-  Deletes a Application.
+  Deletes an Application.
 
   ## Examples
 
