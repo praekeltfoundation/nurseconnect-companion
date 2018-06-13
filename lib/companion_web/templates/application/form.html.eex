@@ -1,0 +1,11 @@
+<%= form_for @changeset, @action, fn f -> %>
+<div class="form-inline">
+  <div class="form-group mx-sm-3">
+    <%= label f, :name, class: "sr-only" %>
+    <%= text_input f, :name, class: "form-control" %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <%= submit "Create", class: "btn btn-primary" %>
+</div>
+<% end %>

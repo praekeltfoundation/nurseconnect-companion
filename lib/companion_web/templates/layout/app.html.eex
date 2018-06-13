@@ -21,14 +21,11 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-              <a class="nav-item nav-link" href="#">Item 1</a>
-              <a class="nav-item nav-link" href="#">Item 2</a>
-              <a class="nav-item nav-link" href="#">Item 3</a>
+              <a class="nav-item nav-link <%= if @conn.request_path == application_path @conn, :index do %>active<% end %>" href="<%= application_path @conn, :index %>">Applications</a>
             </div>
             <%= if @user do %>
             <div class="navbar-nav ml-auto">
-              <a class="nav-item nav-link" href="/auth/logout">Logout</a>
+              <a class="nav-item nav-link" href="<%= auth_path @conn, :logout %>">Logout</a>
             </div>
             <% end %>
           </div>

@@ -1,0 +1,24 @@
+<%= render "form.html", Map.put(assigns, :action, application_path(@conn, :create)) %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Token</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for application <- @applications do %>
+    <tr>
+      <td><%= application.name %></td>
+      <td><%= application.token %></td>
+
+      <td class="text-right">
+        <span><%= link "Delete", to: application_path(@conn, :delete, application), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>

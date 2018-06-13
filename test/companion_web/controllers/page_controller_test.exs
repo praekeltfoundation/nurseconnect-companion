@@ -12,6 +12,6 @@ defmodule CompanionWeb.PageControllerTest do
       |> assign(:user, %{email: "foo@example.org", provider: "google"})
       |> get("/")
 
-    assert html_response(conn, 200) =~ "Welcome to the NurseConnect Companion"
+    assert html_response(conn, 200) =~ "NurseConnect Companion"
   end
 end

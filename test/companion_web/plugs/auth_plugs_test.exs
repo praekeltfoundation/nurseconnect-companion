@@ -64,3 +64,83 @@ defmodule CompanionWeb.Plugs.ExtractUserFromSessionTest do
     assert conn.assigns() == %{user: %{test: "user"}}
   end
 end
+
+defmodule CompanionWeb.Plugs.ExtractApplicationFromHeaderTests do
+  use CompanionWeb.ConnCase
+  alias CompanionWeb.Plugs
+  import Companion.CompanionWeb
+
+  test "application assigned to conn", %{conn: conn} do
+    {:ok, application} = create_application(%{name: "test"})
+
+    conn =
+      conn
+      |> put_req_header("authorization", "Token #{application.token}")
+      |> Plugs.ExtractApplicationFromHeader.call(nil)
+
+    assert conn.assigns() == %{application: application}
+  end
+
+  test "invalid token means no application assigned to conn", %{conn: conn} do
+    conn =
+      conn
+      |> put_req_header("authorization", "Token bad-token")
+      |> Plugs.ExtractApplicationFromHeader.call(nil)
+
+    assert conn.assigns() == %{application: nil}
+  end
+
+  test "missing header means no application assigned to conn", %{conn: conn} do
+    conn =
+      conn
+      |> Plugs.ExtractApplicationFromHeader.call(nil)
+
+    assert conn.assigns() == %{application: nil}
+  end
+
+  test "invalid header means no application assigned to conn", %{conn: conn} do
+    conn =
+      conn
+      |> put_req_header("authorization", "whoops token")
+      |> Plugs.ExtractApplicationFromHeader.call(nil)
+
+    assert conn.assigns() == %{application: nil}
+  end
+
+  test "token not in database means no application assigned to conn", %{conn: conn} do
+    conn =
+      conn
+      |> put_req_header("authorization", "Token #{Ecto.UUID.generate()}")
+      |> Plugs.ExtractApplicationFromHeader.call(nil)
+
+    assert conn.assigns() == %{application: nil}
+  end
+end
+
+defmodule CompanionWeb.Plugs.RequireApplicationTest do
+  use CompanionWeb.ConnCase
+  alias Companion.CompanionWeb.Application
+  alias CompanionWeb.Plugs
+
+  @application %Application{name: "test", token: Ecto.UUID.generate()}
+
+  test "unauthorized returned when application is not assigned", %{conn: conn} do
+    conn =
+      conn
+      |> assign(:application, nil)
+      |> Plugs.RequireApplication.call(nil)
+
+    assert conn.status == 401
+    assert conn.halted
+  end
+
+  test "status not changed when application is assigned", %{conn: conn} do
+    conn =
+      conn
+      |> assign(:application, @application)
+      |> Plugs.RequireApplication.call(nil)
+
+    assert conn.status != 401
+    refute conn.halted
+  end
+end

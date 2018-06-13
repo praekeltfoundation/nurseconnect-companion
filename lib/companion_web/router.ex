@@ -18,11 +18,17 @@ defmodule CompanionWeb.Router do
     plug CompanionWeb.Plugs.RequireLoggedIn, "/auth/login"
   end
 
+  pipeline :authenticated do
+    plug CompanionWeb.Plugs.ExtractApplicationFromHeader
+    plug CompanionWeb.Plugs.RequireApplication
+  end
+
   scope "/", CompanionWeb do
     # Use the default browser stack
     pipe_through [:browser, :logged_in]
 
-    get "/", PageController, :index
+    get "/", ApplicationController, :index
+    resources "/applications", ApplicationController, only: [:create, :delete]
   end
 
   scope "/auth", CompanionWeb do
@@ -32,5 +38,11 @@ defmodule CompanionWeb.Router do
     get "/logout", AuthController, :logout
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
+  end
+
+  scope "/api/v1", CompanionWeb do
+    pipe_through [:api, :authenticated]
+
+    get "/", ApiRootController, :index
   end
 end
