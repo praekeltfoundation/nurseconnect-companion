@@ -2,7 +2,6 @@ defmodule Companion.ApiRootControllerTest do
   use CompanionWeb.ConnCase
 
   alias Companion.CompanionWeb.Application
-  alias Companion.Repo
 
   @application %Application{name: "test", token: Ecto.UUID.generate()}
 

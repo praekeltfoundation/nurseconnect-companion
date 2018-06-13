@@ -10,13 +10,13 @@ defmodule Companion.CompanionWebTest do
     @update_attrs %{name: "some updated name", token: "7488a646-e31f-11e4-aace-600308960668"}
     @invalid_attrs %{name: nil, token: nil}
 
-    def application_fixture(attrs \\ %{}) do
-      {:ok, application} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> CompanionWeb.create_application()
+    defp assume_ok({:ok, value}), do: value
 
-      application
+    def application_fixture(attrs \\ %{}) do
+      attrs
+      |> Enum.into(@valid_attrs)
+      |> CompanionWeb.create_application()
+      |> assume_ok()
     end
 
     test "list_applications/0 returns all applications" do
