@@ -1,5 +1,6 @@
 defmodule CompanionWeb.OptOutControllerTest do
   use CompanionWeb.ConnCase
+  use PhoenixSwagger.SchemaTest, "priv/static/swagger.json"
 
   alias Companion.CompanionWeb.Application
 
@@ -20,11 +21,12 @@ defmodule CompanionWeb.OptOutControllerTest do
   end
 
   describe "create opt_out" do
-    test "renders opt_out when data is valid", %{conn: conn} do
+    test "renders opt_out when data is valid", %{conn: conn, swagger_schema: schema} do
       conn =
         conn
         |> assign(:application, @application)
         |> post(opt_out_path(conn, :create), @create_attrs)
+        |> validate_resp_schema(schema, "OptOutResponse")
 
       assert %{"id" => id} = json_response(conn, 201)
 
@@ -32,6 +34,7 @@ defmodule CompanionWeb.OptOutControllerTest do
         build_conn()
         |> assign(:application, @application)
         |> get(opt_out_path(conn, :show, id))
+        |> validate_resp_schema(schema, "OptOutResponse")
 
       assert json_response(conn, 200) == %{
                "id" => id,

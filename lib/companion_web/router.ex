@@ -1,6 +1,8 @@
 defmodule CompanionWeb.Router do
   use CompanionWeb, :router
 
+  @version Mix.Project.config()[:version]
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -46,5 +48,18 @@ defmodule CompanionWeb.Router do
 
     get "/", ApiRootController, :index
     resources "/optouts", OptOutController, only: [:create, :show]
+  end
+
+  scope "/api/docs" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :companion, swagger_file: "swagger.json"
+  end
+
+  def swagger_info do
+    %{
+      info: %{
+        version: @version,
+        title: "NurseConnect Companion"
+      }
+    }
   end
 end
