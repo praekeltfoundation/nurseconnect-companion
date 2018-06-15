@@ -84,12 +84,13 @@ defmodule Companion.CompanionWebTest do
 
     test "list_optouts/0 returns all optouts" do
       opt_out = opt_out_fixture()
-      assert CompanionWeb.list_optouts() == [opt_out]
+      [result] = CompanionWeb.list_optouts()
+      assert result.id == opt_out.id
     end
 
     test "get_opt_out!/1 returns the opt_out with given id" do
       opt_out = opt_out_fixture()
-      assert CompanionWeb.get_opt_out!(opt_out.id) == opt_out
+      assert CompanionWeb.get_opt_out!(opt_out.id).id == opt_out.id
     end
 
     test "create_opt_out/1 with valid data creates a opt_out" do
@@ -111,7 +112,7 @@ defmodule Companion.CompanionWebTest do
     test "update_opt_out/2 with invalid data returns error changeset" do
       opt_out = opt_out_fixture()
       assert {:error, %Ecto.Changeset{}} = CompanionWeb.update_opt_out(opt_out, @invalid_attrs)
-      assert opt_out == CompanionWeb.get_opt_out!(opt_out.id)
+      assert opt_out.id == CompanionWeb.get_opt_out!(opt_out.id).id
     end
 
     test "delete_opt_out/1 deletes the opt_out" do

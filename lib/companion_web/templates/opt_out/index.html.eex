@@ -3,6 +3,7 @@
     <tr>
       <th>Contact ID</th>
       <th>Created</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -10,6 +11,11 @@
     <tr>
       <td><%= optout.contact_id %></td>
       <td><%= format_timestamp optout.inserted_at %></td>
+      <td>
+        <%= if optout.status == 0 do %><i class="fa fa-spinner"></i><% end %>
+        <%= if optout.status == 1 do %><i class="fa fa-check-circle"></i><% end %>
+        <%= if optout.status == 2 do %><i class="fa fa-exclamation-circle"></i><% end %>
+      </td>
     </tr>
 <% end %>
   </tbody>

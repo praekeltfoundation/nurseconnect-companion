@@ -216,4 +216,32 @@ defmodule Companion.CompanionWeb do
   def change_opt_out(%OptOut{} = opt_out) do
     OptOut.changeset(opt_out, %{})
   end
+
+  @doc """
+  Sets the current status of the opt out processing to one of
+    :processing
+    :complete
+    :error
+
+  ## Examples
+      iex> set_optout_status(id, :processing)
+      {:ok, %OptOut{}}
+  """
+  def set_optout_status(id, :processing) do
+    id
+    |> get_opt_out!()
+    |> update_opt_out(%{status: 0})
+  end
+
+  def set_optout_status(id, :complete) do
+    id
+    |> get_opt_out!()
+    |> update_opt_out(%{status: 1})
+  end
+
+  def set_optout_status(id, :error) do
+    id
+    |> get_opt_out!()
+    |> update_opt_out(%{status: 2})
+  end
 end

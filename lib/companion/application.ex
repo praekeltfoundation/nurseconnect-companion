@@ -2,6 +2,9 @@ defmodule Companion.Application do
   @moduledoc false
   use Application
 
+  alias Companion.CompanionWeb.OptOut
+  alias Companion.Repo
+
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
@@ -12,9 +15,23 @@ defmodule Companion.Application do
       # Start the Ecto repository
       supervisor(Companion.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(CompanionWeb.Endpoint, [])
-      # Start your own worker by calling: Companion.Worker.start_link(arg1, arg2, arg3)
-      # worker(Companion.Worker, [arg1, arg2, arg3]),
+      supervisor(CompanionWeb.Endpoint, []),
+      # Jobs
+      {Honeydew.EctoPollQueue,
+       [
+         :process_opt_out,
+         schema: OptOut,
+         repo: Repo,
+         stale_timeout: Application.get_env(:honeydew, :timeout),
+         failure_mode:
+           {Honeydew.FailureMode.Retry,
+            [
+              times: Application.get_env(:honeydew, :retries),
+              finally: {Companion.Jobs.ProcessOptOut.Failure, []}
+            ]},
+         success_mode: Honeydew.SuccessMode.Log
+       ]},
+      {Honeydew.Workers, [:process_opt_out, Companion.Jobs.ProcessOptOut]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

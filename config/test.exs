@@ -22,3 +22,18 @@ config :ueberauth, Ueberauth,
   providers: [
     google: {Ueberauth.Strategy.Google, [hd: "example.org"]}
   ]
+
+# Use Tesla mock adapter
+config :tesla, adapter: Tesla.Mock
+config :tesla, Tesla.Mock, json_engine: Poison
+
+# Rapidpro config
+config :companion, :rapidpro,
+  url: "http://rapidpro",
+  token: "rapidprotoken"
+
+# Jembi config
+config :companion, :openhim,
+  url: "http://openhim",
+  username: "user",
+  password: "pass"
