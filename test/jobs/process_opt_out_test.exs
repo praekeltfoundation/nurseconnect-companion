@@ -58,4 +58,12 @@ defmodule Companion.Jobs.ProcessOptOutTests do
     optout = get_opt_out!(optout.id)
     assert optout.status == 1
   end
+
+  test "updates error when failure method is run" do
+    {:ok, optout} = create_opt_out(%{contact_id: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"})
+    ProcessOptOut.Failure.handle_failure(%Honeydew.Job{task: {:run, [optout.id]}}, nil, nil)
+
+    optout = get_opt_out!(optout.id)
+    assert optout.status == 2
+  end
 end
