@@ -62,7 +62,9 @@ defmodule Companion.Jobs.ProcessOptOut do
       id: urn_to_identifier(nurse_urn),
       optoutreason: @reason_unknown,
       encdate:
-        Timex.format!(Timex.parse!(opt_out_date, "{ISO:Extended}"), "{YYYY}{0M}{0D}{h24}{m}{s}")
+        opt_out_date
+        |> Timex.parse!("{ISO:Extended}")
+        |> Timex.format!("{YYYY}{0M}{0D}{h24}{m}{s}")
     }
   end
 
