@@ -67,10 +67,13 @@ defmodule Companion.Jobs.ProcessOptOut do
   end
 
   def run(id) do
-    optout = get_opt_out!(id)
-
-    contact = Rapidpro.get_contact(optout.contact_id)
-    _ = OpenHIM.create_nurseconnect_optout(openhim_optout_from_contact(contact))
+    _ =
+      id
+      |> get_opt_out!()
+      |> Map.get(:contact_id)
+      |> Rapidpro.get_contact()
+      |> openhim_optout_from_contact()
+      |> OpenHIM.create_nurseconnect_optout()
 
     set_optout_status(id, :complete)
   end
