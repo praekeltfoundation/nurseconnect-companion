@@ -57,6 +57,7 @@ defmodule Companion.Mixfile do
       {:ex_json_schema, "~> 0.5"},
       {:honeydew, "~> 1.1.5"},
       {:tesla, "~> 1.0.0"},
+      {:poison, "~> 3.1"},
 
       # Dev/test/build tools.
       {:excoveralls, "~> 0.8", only: :test},
