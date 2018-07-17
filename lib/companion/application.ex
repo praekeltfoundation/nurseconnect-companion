@@ -1,9 +1,7 @@
 defmodule Companion.Application do
   @moduledoc false
   use Application
-
-  alias Companion.CompanionWeb.OptOut
-  alias Companion.Repo
+  alias Companion.Jobs
 
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
@@ -17,21 +15,8 @@ defmodule Companion.Application do
       # Start the endpoint when the application starts
       supervisor(CompanionWeb.Endpoint, []),
       # Jobs
-      {Honeydew.EctoPollQueue,
-       [
-         :process_opt_out,
-         schema: OptOut,
-         repo: Repo,
-         stale_timeout: Application.get_env(:honeydew, :timeout),
-         failure_mode:
-           {Honeydew.FailureMode.Retry,
-            [
-              times: Application.get_env(:honeydew, :retries),
-              finally: {Companion.Jobs.ProcessOptOut.Failure, []}
-            ]},
-         success_mode: Honeydew.SuccessMode.Log
-       ]},
-      {Honeydew.Workers, [:process_opt_out, Companion.Jobs.ProcessOptOut]}
+      {Honeydew.EctoPollQueue, Jobs.ProcessOptOut.supervisor_config()},
+      {Honeydew.Workers, [:process_opt_out, Jobs.ProcessOptOut]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

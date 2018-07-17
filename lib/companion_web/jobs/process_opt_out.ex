@@ -6,6 +6,8 @@ defmodule Companion.Jobs.ProcessOptOut do
   """
   import Companion.CompanionWeb
   use Honeydew.Progress
+  alias Companion.CompanionWeb.OptOut
+  alias Companion.Repo
   alias CompanionWeb.Clients.OpenHIM
   alias CompanionWeb.Clients.Rapidpro
 
@@ -13,6 +15,22 @@ defmodule Companion.Jobs.ProcessOptOut do
   @swt_sms 1
   @type_nurse_optout 8
   @reason_unknown 6
+
+  def supervisor_config do
+    [
+      :process_opt_out,
+      schema: OptOut,
+      repo: Repo,
+      stale_timeout: Application.get_env(:honeydew, :timeout),
+      failure_mode:
+        {Honeydew.FailureMode.Retry,
+         [
+           times: Application.get_env(:honeydew, :retries),
+           finally: {Companion.Jobs.ProcessOptOut.Failure, []}
+         ]},
+      success_mode: Honeydew.SuccessMode.Log
+    ]
+  end
 
   defp extract_number_from_urn(urn) do
     [_, number] = String.split(urn, ":")
