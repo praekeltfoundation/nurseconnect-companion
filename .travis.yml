@@ -59,7 +59,7 @@ jobs:
         - (cd seaworthy; py.test -v --phoenix-image "$IMAGE_NAME" test.py)
       before_deploy:
         - pip install docker-ci-deploy===0.3.0
-        - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+        - echo "$REGISTRY_PASS" | docker login -u "$REGISTRY_USER" --password-stdin
       deploy:
         provider: script
         script: dcd --version "$(git rev-parse --short HEAD)" --version-latest "$IMAGE_NAME"
