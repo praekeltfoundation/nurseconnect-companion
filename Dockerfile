@@ -3,6 +3,7 @@ FROM elixir:1.6-alpine as elixir
 ENV MIX_ENV="prod"
 COPY lib lib
 COPY config config
+COPY priv priv
 COPY mix.* ./
 RUN mix local.hex --force
 RUN mix local.rebar --force
