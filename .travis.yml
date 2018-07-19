@@ -40,7 +40,7 @@ jobs:
         - mix dialyzer --halt-exit-status
 
     # Deploy on merge to develop
-    - python: "2.7"
+    - python: "3.7"
       sudo: required
       dist: trusty
       services: [docker]
