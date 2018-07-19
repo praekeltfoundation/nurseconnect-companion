@@ -29,3 +29,9 @@ npm-debug.log
 .elixir_ls
 cover
 .env
+
+# Python
+*.pyc
+.cache
+.pytest_cache
+__pycache__
