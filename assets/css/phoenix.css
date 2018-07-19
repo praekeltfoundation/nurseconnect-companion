@@ -32,3 +32,11 @@ body, form, ul, table {
 .center {
   text-align: center;
 }
+
+.fa-check-circle {
+  color: green;
+}
+
+.fa-exclamation-circle {
+  color: red;
+}

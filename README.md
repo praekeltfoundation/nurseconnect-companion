@@ -26,3 +26,10 @@ Environment config:
 `HOST` - Hostname of the service
 `SECRET_KEY` - Secure secret key for the service
 `DATABASE_URL` - URL to connect to the database
+`TASK_TIMEOUT` - Timeout for tasks to be retried. Defaults to 300 seconds
+`TASK_RETRIES` - Number of retries before task is considered failed. Defaults to 10
+`RAPIDPRO_URL` - URL of the rapidpro instance where the contacts are stored
+`RAPIDPRO_TOKEN` - Authorization token to access the rapidpro instance
+`OPENHIM_URL` - URL to send to OpenHIM
+`OPENHIM_USERNAME` - Username to access OpenHIM
+`OPENHIM_PASSWORD` - Password to access OpenHIM

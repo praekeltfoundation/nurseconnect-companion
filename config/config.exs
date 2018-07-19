@@ -31,6 +31,35 @@ config :ueberauth, Ueberauth.Strategy.Google.OAuth,
   client_id: System.get_env("GOOGLE_CLIENT_ID"),
   client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
 
+# Config pagination
+config :kerosene,
+  theme: :bootstrap4
+
+# Config swagger
+config :companion, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      router: CompanionWeb.Router,
+      endpoint: CompanionWeb.Endpoint
+    ]
+  }
+
+# Task / Honeydew config
+config :honeydew,
+  timeout: String.to_integer(System.get_env("TASK_TIMEOUT") || "300"),
+  retries: String.to_integer(System.get_env("TASK_RETRIES") || "10")
+
+# Rapidpro config
+config :companion, :rapidpro,
+  url: System.get_env("RAPIDPRO_URL") || "http://rapidpro",
+  token: System.get_env("RAPIDPRO_TOKEN") || "rapidprotoken"
+
+# Jembi config
+config :companion, :openhim,
+  url: System.get_env("OPENHIM_URL") || "http://openhim",
+  username: System.get_env("OPENHIM_USERNAME") || "user",
+  password: System.get_env("OPENHIM_PASSWORD") || "pass"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

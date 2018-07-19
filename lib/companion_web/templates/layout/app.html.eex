@@ -20,8 +20,11 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav mr-auto">
+            <div class="navbar-nav">
               <a class="nav-item nav-link <%= if @conn.request_path == application_path @conn, :index do %>active<% end %>" href="<%= application_path @conn, :index %>">Applications</a>
+            </div>
+            <div class="navbar-nav">
+              <a class="nav-item nav-link <%= if @conn.request_path == opt_out_path @conn, :index do %>active<% end %>" href="<%= opt_out_path @conn, :index %>">Opt Outs</a>
             </div>
             <%= if @user do %>
             <div class="navbar-nav ml-auto">

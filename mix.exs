@@ -7,7 +7,7 @@ defmodule Companion.Mixfile do
       version: "0.0.1",
       elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix, :gettext, :phoenix_swagger] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -51,6 +51,13 @@ defmodule Companion.Mixfile do
       {:cowboy, "~> 1.0"},
       {:ueberauth, "~> 0.4"},
       {:ueberauth_google, "~> 0.7"},
+      {:timex, "~> 3.0"},
+      {:kerosene, "~> 0.7"},
+      {:phoenix_swagger, "~> 0.8"},
+      {:ex_json_schema, "~> 0.5"},
+      {:honeydew, "~> 1.1.5"},
+      {:tesla, "~> 1.0.0"},
+      {:poison, "~> 3.1"},
 
       # Dev/test/build tools.
       {:excoveralls, "~> 0.8", only: :test},

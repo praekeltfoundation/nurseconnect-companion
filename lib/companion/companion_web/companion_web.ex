@@ -120,4 +120,128 @@ defmodule Companion.CompanionWeb do
   def change_application(%Application{} = application) do
     Application.changeset(application, %{})
   end
+
+  alias Companion.CompanionWeb.OptOut
+
+  @doc """
+  Returns the list of optouts.
+
+  ## Examples
+
+      iex> list_optouts()
+      [%OptOut{}, ...]
+
+  """
+  def list_optouts do
+    Repo.all(OptOut)
+  end
+
+  @doc """
+  Gets a single opt_out.
+
+  Raises `Ecto.NoResultsError` if the Opt out does not exist.
+
+  ## Examples
+
+      iex> get_opt_out!(123)
+      %OptOut{}
+
+      iex> get_opt_out!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_opt_out!(id), do: Repo.get!(OptOut, id)
+
+  @doc """
+  Creates a opt_out.
+
+  ## Examples
+
+      iex> create_opt_out(%{field: value})
+      {:ok, %OptOut{}}
+
+      iex> create_opt_out(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_opt_out(attrs \\ %{}) do
+    %OptOut{}
+    |> OptOut.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a opt_out.
+
+  ## Examples
+
+      iex> update_opt_out(opt_out, %{field: new_value})
+      {:ok, %OptOut{}}
+
+      iex> update_opt_out(opt_out, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_opt_out(%OptOut{} = opt_out, attrs) do
+    opt_out
+    |> OptOut.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a OptOut.
+
+  ## Examples
+
+      iex> delete_opt_out(opt_out)
+      {:ok, %OptOut{}}
+
+      iex> delete_opt_out(opt_out)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_opt_out(%OptOut{} = opt_out) do
+    Repo.delete(opt_out)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking opt_out changes.
+
+  ## Examples
+
+      iex> change_opt_out(opt_out)
+      %Ecto.Changeset{source: %OptOut{}}
+
+  """
+  def change_opt_out(%OptOut{} = opt_out) do
+    OptOut.changeset(opt_out, %{})
+  end
+
+  @doc """
+  Sets the current status of the opt out processing to one of
+    :processing
+    :complete
+    :error
+
+  ## Examples
+      iex> set_optout_status(id, :processing)
+      {:ok, %OptOut{}}
+  """
+  def set_optout_status(id, :processing) do
+    id
+    |> get_opt_out!()
+    |> update_opt_out(%{status: 0})
+  end
+
+  def set_optout_status(id, :complete) do
+    id
+    |> get_opt_out!()
+    |> update_opt_out(%{status: 1})
+  end
+
+  def set_optout_status(id, :error) do
+    id
+    |> get_opt_out!()
+    |> update_opt_out(%{status: 2})
+  end
 end
