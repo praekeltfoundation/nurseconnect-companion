@@ -6,8 +6,8 @@ defmodule CompanionWeb.OptOutControllerTest do
 
   @application %Application{name: "test", token: Ecto.UUID.generate()}
   @user %{email: "test@example.org", provider: "google"}
-  @create_attrs %{contact: "7488a646-e31f-11e4-aace-600308960662"}
-  @invalid_attrs %{contact: nil}
+  @create_attrs %{contact: %{uuid: "7488a646-e31f-11e4-aace-600308960662"}}
+  @invalid_attrs %{contact: %{uuid: nil}}
 
   describe "index" do
     test "lists all optouts", %{conn: conn} do
