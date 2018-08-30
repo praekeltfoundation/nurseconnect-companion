@@ -13,17 +13,26 @@ defmodule CompanionWeb.OptOutController do
       OptOutRequest:
         swagger_schema do
           title("OptOutRequest")
-          description("Request schema for creating an opt out")
+          description("Schema for an opt out")
 
           properties do
             contact(
-              :string,
-              "UUID of the contact that requested the opt out",
-              required: true,
-              format: :uuid,
-              example: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609"
+              Schema.new do
+                properties do
+                  uuid(:string, "UUID of the contact that requested the opt out",
+                    required: true,
+                    format: :uuid
+                  )
+                end
+              end
             )
           end
+
+          example(%{
+            contact: %{
+              uuid: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609"
+            }
+          })
         end,
       OptOutResponse:
         swagger_schema do
@@ -34,6 +43,11 @@ defmodule CompanionWeb.OptOutController do
             id(:integer, "Unique ID of the Opt Out")
             contact_id(:string, "UUID of the contact that requested the opt out", format: :uuid)
           end
+
+          example(%{
+            id: "2",
+            contact_id: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609"
+          })
         end
     }
   end
@@ -50,28 +64,21 @@ defmodule CompanionWeb.OptOutController do
   swagger_path(:create) do
     summary("Create opt out")
     description("Creates a new opt out")
-    consumes("application/x-www-form-urlencoded")
+    consumes("application/json")
     produces("application/json")
 
-    parameter(
-      :contact,
-      :body,
-      Schema.ref(:OptOutRequest),
-      "The UUID of the contact that requested the opt out"
-    )
+    parameters do
+      body(:body, Schema.ref(:OptOutRequest), "The details of the opt out to be created")
+    end
 
     response(
       201,
       "Opt Out created OK",
-      Schema.ref(:OptOutResponse),
-      example: %{
-        id: 123,
-        contact_id: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609"
-      }
+      Schema.ref(:OptOutResponse)
     )
   end
 
-  def create(conn, %{"contact" => contact_id}) do
+  def create(conn, %{"contact" => %{"uuid" => contact_id}}) do
     with {:ok, %OptOut{} = opt_out} <- CompanionWeb.create_opt_out(%{contact_id: contact_id}) do
       conn
       |> put_status(:created)
@@ -89,11 +96,7 @@ defmodule CompanionWeb.OptOutController do
     response(
       201,
       "Opt Out created OK",
-      Schema.ref(:OptOutResponse),
-      example: %{
-        id: 123,
-        contact_id: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609"
-      }
+      Schema.ref(:OptOutResponse)
     )
   end
 
