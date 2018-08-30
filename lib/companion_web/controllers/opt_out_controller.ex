@@ -19,7 +19,9 @@ defmodule CompanionWeb.OptOutController do
             contact(
               Schema.new do
                 properties do
-                  uuid(:string, "UUID of the contact that requested the opt out",
+                  uuid(
+                    :string,
+                    "UUID of the contact that requested the opt out",
                     required: true,
                     format: :uuid
                   )
