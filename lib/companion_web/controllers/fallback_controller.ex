@@ -18,3 +18,13 @@ defmodule CompanionWeb.FallbackController do
     |> render(CompanionWeb.ErrorView, :"404", %{})
   end
 end
+
+defmodule CompanionWeb.FallbackHSMController do
+  use CompanionWeb, :controller
+
+  def call(conn, {:error, :bad_request, reason}) do
+    conn
+    |> put_status(:bad_request)
+    |> render(CompanionWeb.HSMView, "error.json", reason: reason)
+  end
+end
