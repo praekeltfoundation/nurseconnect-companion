@@ -60,6 +60,14 @@ config :companion, :openhim,
   username: System.get_env("OPENHIM_USERNAME") || "user",
   password: System.get_env("OPENHIM_PASSWORD") || "pass"
 
+# Whatsapp config
+config :companion, :whatsapp,
+  url: System.get_env("WHATSAPP_URL") || "https://whatsapp",
+  username: System.get_env("WHATSAPP_USERNAME") || "user",
+  password: System.get_env("WHATSAPP_PASSWORD") || "pass",
+  hsm_namespace: System.get_env("WHATSAPP_HSM_NAMESPACE") || "hsm_namespace",
+  hsm_element_name: System.get_env("WHATSAPP_HSM_ELEMENT_NAME") || "hsm_element_name"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
