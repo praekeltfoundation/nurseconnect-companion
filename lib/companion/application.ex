@@ -14,6 +14,9 @@ defmodule Companion.Application do
       supervisor(Companion.Repo, []),
       # Start the endpoint when the application starts
       supervisor(CompanionWeb.Endpoint, []),
+      # Caches
+      {ConCache,
+       [name: :whatsapp_token, ttl_check_interval: :timer.minutes(1), global_ttl: :infinity]},
       # Jobs
       {Honeydew.EctoPollQueue, Jobs.ProcessOptOut.supervisor_config()},
       {Honeydew.Workers, [:process_opt_out, Jobs.ProcessOptOut]}
