@@ -48,6 +48,7 @@ defmodule CompanionWeb.Router do
 
     get "/", ApiRootController, :index
     resources "/optouts", OptOutController, only: [:create, :show]
+    resources "/hsm", HSMController, only: [:create]
   end
 
   scope "/api/docs" do

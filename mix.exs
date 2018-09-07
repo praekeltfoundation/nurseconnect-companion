@@ -58,6 +58,8 @@ defmodule Companion.Mixfile do
       {:honeydew, "~> 1.1.5"},
       {:tesla, "~> 1.0.0"},
       {:poison, "~> 3.1"},
+      # We're using con_cache instead of cachex because we want to set TTL on a fetch
+      {:con_cache, "~> 0.13.0"},
 
       # Dev/test/build tools.
       {:excoveralls, "~> 0.8", only: :test},

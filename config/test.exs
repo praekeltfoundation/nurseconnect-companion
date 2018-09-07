@@ -37,3 +37,11 @@ config :companion, :openhim,
   url: "http://openhim",
   username: "user",
   password: "pass"
+
+# Whatsapp config
+config :companion, :whatsapp,
+  url: "https://whatsapp",
+  username: "user",
+  password: "pass",
+  hsm_namespace: "hsm_namespace",
+  hsm_element_name: "hsm_element_name"

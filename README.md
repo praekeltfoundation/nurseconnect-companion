@@ -33,3 +33,8 @@ Environment config:
 `OPENHIM_URL` - URL to send to OpenHIM
 `OPENHIM_USERNAME` - Username to access OpenHIM
 `OPENHIM_PASSWORD` - Password to access OpenHIM
+`WHATSAPP_URL` - URL of the WhatsApp instance
+`WHATSAPP_USERNAME` - Username for WhatsApp instance auth
+`WHATSAPP_PASSWORD` - Password for WhatsApp instance auth
+`WHATSAPP_HSM_NAMESPACE` - The HSM namespace to use for the send HSM endpoint
+`WHATSAPP_HSM_ELEMENT_NAME` - The HSM element name to use for the send HSM endpoint
