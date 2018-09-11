@@ -60,6 +60,8 @@ defmodule Companion.Mixfile do
       {:poison, "~> 3.1"},
       # We're using con_cache instead of cachex because we want to set TTL on a fetch
       {:con_cache, "~> 0.13.0"},
+      # Version 7 of sentry requires Elixir 1.7
+      {:sentry, "~> 6.4"},
 
       # Dev/test/build tools.
       {:excoveralls, "~> 0.8", only: :test},

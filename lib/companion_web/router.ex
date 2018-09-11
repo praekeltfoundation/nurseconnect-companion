@@ -1,5 +1,7 @@
 defmodule CompanionWeb.Router do
   use CompanionWeb, :router
+  use Plug.ErrorHandler
+  use Sentry.Plug
 
   @version Mix.Project.config()[:version]
 
