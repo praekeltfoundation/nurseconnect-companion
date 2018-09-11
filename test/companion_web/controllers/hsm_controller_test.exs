@@ -35,7 +35,7 @@ defmodule CompanionWeb.HSMControllerTest do
           users: [
             %{
               token: "testtoken",
-              expires_after: "2018-09-11 12:48:55+00:00"
+              expires_after: Timex.now() |> Timex.shift(days: 1)
             }
           ]
         })
