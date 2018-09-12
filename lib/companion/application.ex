@@ -8,6 +8,12 @@ defmodule Companion.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
+    # Metrics
+    CompanionWeb.PhoenixInstrumenter.setup()
+    CompanionWeb.PipelineInstrumenter.setup()
+    CompanionWeb.RepoInstrumenter.setup()
+    CompanionWeb.MetricsPlugExporter.setup()
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository

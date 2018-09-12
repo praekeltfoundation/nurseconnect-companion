@@ -63,6 +63,12 @@ defmodule Companion.Mixfile do
       # Version 7 of sentry requires Elixir 1.7
       {:sentry, "~> 6.4"},
 
+      # Metrics
+      {:prometheus_phoenix, "~> 1.2.0"},
+      {:prometheus_ecto, "~> 1.0.1"},
+      {:prometheus_plugs, "~> 1.1.1"},
+      {:prometheus_process_collector, "~> 1.3.1"},
+
       # Dev/test/build tools.
       {:excoveralls, "~> 0.8", only: :test},
       {:dialyxir, "~> 0.5", only: :dev, runtime: false},

@@ -14,7 +14,10 @@ config :companion, CompanionWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "bgoJnmzD5D2uoa7L/vkKykeAV24Tcujdhf8m6HegWiPxidtUJpXpJ4jnlqcqPCwC",
   render_errors: [view: CompanionWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Companion.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Companion.PubSub, adapter: Phoenix.PubSub.PG2],
+  instrumenters: [CompanionWeb.PhoenixInstrumenter]
+
+config :companion, Companion.Repo, loggers: [CompanionWeb.RepoInstrumenter, Ecto.LogEntry]
 
 # Configures Elixir's Logger
 config :logger, :console,
