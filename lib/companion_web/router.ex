@@ -17,6 +17,11 @@ defmodule CompanionWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :metrics do
+    plug CompanionWeb.Plugs.RequireInternalRequest
+    plug CompanionWeb.MetricsPlugExporter
+  end
+
   pipeline :logged_in do
     plug CompanionWeb.Plugs.ExtractUserFromSession
     plug CompanionWeb.Plugs.RequireLoggedIn, "/auth/login"
@@ -55,6 +60,11 @@ defmodule CompanionWeb.Router do
 
   scope "/api/docs" do
     forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :companion, swagger_file: "swagger.json"
+  end
+
+  scope "/metrics", CompanionWeb do
+    pipe_through [:metrics]
+    get "/", ApiRootController, :index
   end
 
   def swagger_info do
