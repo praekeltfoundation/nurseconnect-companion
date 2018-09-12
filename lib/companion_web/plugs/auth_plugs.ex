@@ -111,7 +111,7 @@ defmodule CompanionWeb.Plugs.RequireInternalRequest do
   def call(conn, _) do
     case get_req_header(conn, "x-forwarded-for") do
       [] -> conn
-      _ -> conn |> send_resp(:unauthorized, "") |> halt
+      _ -> conn |> send_resp(:forbidden, "") |> halt
     end
   end
 end

@@ -155,7 +155,7 @@ defmodule CompanionWeb.Plugs.RequireInternalRequestTest do
       |> put_req_header("x-forwarded-for", "1.2.3.4")
       |> Plugs.RequireInternalRequest.call(nil)
 
-    assert conn.status == 401
+    assert conn.status == 403
     assert conn.halted
   end
 
@@ -164,6 +164,6 @@ defmodule CompanionWeb.Plugs.RequireInternalRequestTest do
       build_conn()
       |> Plugs.RequireInternalRequest.call(nil)
 
-    assert conn.status !== 401
+    assert conn.status !== 403
   end
 end
