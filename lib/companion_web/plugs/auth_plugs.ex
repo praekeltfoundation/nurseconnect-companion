@@ -99,3 +99,19 @@ defmodule CompanionWeb.Plugs.RequireApplication do
     conn
   end
 end
+
+defmodule CompanionWeb.Plugs.RequireInternalRequest do
+  @moduledoc """
+  Restricts requests to any that don't have the X-Forwarded-For header
+  """
+  import Plug.Conn
+
+  def init(default), do: default
+
+  def call(conn, _) do
+    case get_req_header(conn, "x-forwarded-for") do
+      [] -> conn
+      _ -> conn |> send_resp(:unauthorized, "") |> halt
+    end
+  end
+end

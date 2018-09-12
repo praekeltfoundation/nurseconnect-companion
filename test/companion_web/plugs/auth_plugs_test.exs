@@ -144,3 +144,26 @@ defmodule CompanionWeb.Plugs.RequireApplicationTest do
     refute conn.halted
   end
 end
+
+defmodule CompanionWeb.Plugs.RequireInternalRequestTest do
+  use CompanionWeb.ConnCase
+  alias CompanionWeb.Plugs
+
+  test "unauthorized when forwarded for header present" do
+    conn =
+      build_conn()
+      |> put_req_header("x-forwarded-for", "1.2.3.4")
+      |> Plugs.RequireInternalRequest.call(nil)
+
+    assert conn.status == 401
+    assert conn.halted
+  end
+
+  test "pass through when header not present" do
+    conn =
+      build_conn()
+      |> Plugs.RequireInternalRequest.call(nil)
+
+    assert conn.status !== 401
+  end
+end
