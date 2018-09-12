@@ -1,5 +1,5 @@
 # Build elixir app
-FROM elixir:1.6-alpine as elixir
+FROM elixir:1.6 as elixir
 ENV MIX_ENV="prod"
 COPY lib lib
 COPY config config
@@ -21,9 +21,19 @@ RUN npm install
 RUN node node_modules/brunch/bin/brunch build --production
 
 # Combine
-FROM elixir
+FROM elixir:1.6-alpine
+ENV MIX_ENV="prod"
+RUN mix local.hex --force
+RUN mix local.rebar --force
+COPY --from=elixir _build _build
+COPY --from=elixir config config
+COPY --from=elixir deps deps
+COPY --from=elixir lib lib
+COPY --from=elixir priv priv
+COPY --from=elixir mix.* ./
 COPY --from=node /priv/static /priv/static
 RUN mix phx.digest
+RUN mix compile
 
 ENV PORT=4000
 EXPOSE 4000
