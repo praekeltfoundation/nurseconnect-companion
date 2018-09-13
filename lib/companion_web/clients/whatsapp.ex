@@ -11,6 +11,8 @@ defmodule CompanionWeb.Clients.Whatsapp do
     {"authorization", "Bearer " <> Application.get_env(:companion, :whatsapp)[:token]}
   ]
 
+  plug Tesla.Middleware.Logger
+
   @doc """
   Given the address and message, sends the HSM
   """

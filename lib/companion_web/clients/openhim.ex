@@ -11,6 +11,7 @@ defmodule CompanionWeb.Clients.OpenHIM do
     password: Application.get_env(:companion, :openhim)[:password]
 
   plug Tesla.Middleware.JSON, engine: Poison
+  plug Tesla.Middleware.Logger
 
   @doc """
   Given the optout with the following data:

@@ -11,6 +11,7 @@ defmodule CompanionWeb.Clients.Rapidpro do
   ]
 
   plug Tesla.Middleware.JSON, engine: Poison
+  plug Tesla.Middleware.Logger
 
   @doc """
   Given the string UUID of the contact, fetches that contact from Rapidpro
