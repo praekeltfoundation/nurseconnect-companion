@@ -91,24 +91,8 @@ defmodule CompanionWeb.HSMController do
 
   def create(conn, %{"contact" => %{"urn" => urn}}) do
     with {:ok, address} <- get_address_from_urn(urn),
-         {:ok, message} <- get_message_from_header(conn) do
-      response =
-        ConCache.get_or_store(:whatsapp_token, :whatsapp_token, fn ->
-          {token, expire} = Whatsapp.login!()
-
-          seconds =
-            Timex.Interval.new(
-              from: Timex.now(),
-              # We should expire 5 minutes before the token expires
-              until: Timex.shift(Timex.parse!(expire, "{ISO:Extended}"), minutes: -5)
-            )
-            |> Timex.Interval.duration(:seconds)
-
-          %ConCache.Item{value: token, ttl: :timer.seconds(seconds)}
-        end)
-        |> Whatsapp.client()
-        |> Whatsapp.send_hsm!(address, message)
-
+         {:ok, message} <- get_message_from_header(conn),
+         {:ok, response} <- Whatsapp.send_hsm(address, message) do
       conn
       |> put_status(:created)
       |> render("create.json", response: response.body)

@@ -12,7 +12,6 @@ defmodule CompanionWeb.HSMControllerTest do
   @invalid_create_attrs %{
     contact: %{uuid: "b8225caf-cd55-47f8-8e2f-11206571bf1f", urn: "tel:+27820000000"}
   }
-  @empty_json Poison.encode!(%{})
   @hsm_request Poison.encode!(%{
                  to: "27820000000",
                  type: "hsm",
@@ -22,36 +21,41 @@ defmodule CompanionWeb.HSMControllerTest do
                    localizable_params: [%{default: "Test message"}]
                  }
                })
+  @bad_hsm_request Poison.encode!(%{
+                     to: "27820000000",
+                     type: "hsm",
+                     hsm: %{
+                       namespace: "hsm_namespace",
+                       element_name: "hsm_element_name",
+                       localizable_params: [%{default: "Bad message"}]
+                     }
+                   })
 
   setup do
     mock(fn
       %{
         method: :post,
-        url: "https://whatsapp/v1/users/login",
-        headers: [{:authorization, "Basic dXNlcjpwYXNz"}, {"content-type", "application/json"}],
-        body: @empty_json
-      } ->
-        json(%{
-          users: [
-            %{
-              token: "testtoken",
-              expires_after: Timex.now() |> Timex.shift(days: 1)
-            }
-          ]
-        })
-
-      %{
-        method: :post,
         url: "https://whatsapp/v1/messages",
         headers: [
-          {"authorization", "Bearer testtoken"},
-          {"content-type", "application/json"}
+          {"content-type", "application/json"},
+          {"authorization", "Bearer token"}
         ],
         body: @hsm_request
       } ->
         json(%{
           messages: [%{id: "gBEGkYiEB1VXAglK1ZEqA1YKPrU"}]
         })
+
+      %{
+        method: :post,
+        url: "https://whatsapp/v1/messages",
+        headers: [
+          {"content-type", "application/json"},
+          {"authorization", "Bearer token"}
+        ],
+        body: @bad_hsm_request
+      } ->
+        %Tesla.Env{status: 500, body: "Error"}
     end)
 
     :ok
@@ -97,6 +101,16 @@ defmodule CompanionWeb.HSMControllerTest do
         |> post(hsm_path(conn, :create), @invalid_create_attrs)
 
       assert %{"error" => "Invalid WhatsApp URN: tel:+27820000000"} = json_response(conn, 400)
+    end
+
+    test "renders error when there is a client error", %{conn: conn} do
+      conn =
+        conn
+        |> assign(:application, @application)
+        |> put_req_header("x-message-content", "Bad message")
+        |> post(hsm_path(conn, :create), @create_attrs)
+
+      assert "Error" = response(conn, 500)
     end
   end
 end
