@@ -7,40 +7,17 @@ defmodule CompanionWeb.Clients.Whatsapp do
   plug Tesla.Middleware.BaseUrl, Application.get_env(:companion, :whatsapp)[:url]
   plug Tesla.Middleware.JSON, engine: Poison
 
-  @doc """
-  Get the token and expiry for the configured WhatsApp user
-  """
-  def login! do
-    config = Application.get_env(:companion, :whatsapp)
+  plug Tesla.Middleware.Headers, [
+    {"authorization", "Bearer " <> Application.get_env(:companion, :whatsapp)[:token]}
+  ]
 
-    %{body: %{"users" => [%{"token" => token, "expires_after" => expires} | _]}} =
-      post!(
-        "/v1/users/login",
-        %{},
-        headers: [authorization: "Basic " <> basic_auth(config[:username], config[:password])]
-      )
-
-    {token, expires}
-  end
-
-  defp basic_auth(username, password) do
-    Base.encode64("#{username}:#{password}")
-  end
-
-  @doc """
-  Build the client with a runtime token argument
-  """
-  def client(token) do
-    Tesla.build_client([
-      {Tesla.Middleware.Headers, [{"authorization", "Bearer " <> token}]}
-    ])
-  end
+  plug Tesla.Middleware.Logger
 
   @doc """
   Given the address and message, sends the HSM
   """
-  def send_hsm!(client, to, message) do
-    post!(client, "/v1/messages", %{
+  def send_hsm(to, message) do
+    post("/v1/messages", %{
       to: to,
       type: "hsm",
       hsm: %{
@@ -49,5 +26,18 @@ defmodule CompanionWeb.Clients.Whatsapp do
         localizable_params: [%{default: message}]
       }
     })
+    |> raise_for_status()
   end
+
+  defp raise_for_status({:ok, response}) do
+    case response.status do
+      status when status in 200..299 ->
+        {:ok, response}
+
+      status ->
+        {:error, status, response.body}
+    end
+  end
+
+  defp raise_for_status({:error, error}), do: {:error, :internal_server_error, error}
 end

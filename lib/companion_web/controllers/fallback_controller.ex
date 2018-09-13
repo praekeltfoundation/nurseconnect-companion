@@ -27,4 +27,9 @@ defmodule CompanionWeb.FallbackHSMController do
     |> put_status(:bad_request)
     |> render(CompanionWeb.HSMView, "error.json", reason: reason)
   end
+
+  def call(conn, {:error, status, reason}) do
+    conn
+    |> send_resp(status, reason)
+  end
 end

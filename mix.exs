@@ -7,7 +7,7 @@ defmodule Companion.Mixfile do
       version: "0.0.1",
       elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext, :phoenix_swagger] ++ Mix.compilers(),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers() ++ [:phoenix_swagger],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -58,8 +58,6 @@ defmodule Companion.Mixfile do
       {:honeydew, "~> 1.1.5"},
       {:tesla, "~> 1.0.0"},
       {:poison, "~> 3.1"},
-      # We're using con_cache instead of cachex because we want to set TTL on a fetch
-      {:con_cache, "~> 0.13.0"},
       # Version 7 of sentry requires Elixir 1.7
       {:sentry, "~> 6.4"},
 
