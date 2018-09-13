@@ -66,7 +66,7 @@ config :companion, :openhim,
 # Whatsapp config
 config :companion, :whatsapp,
   url: System.get_env("WHATSAPP_URL") || "https://whatsapp",
-  token: System.get_env("WHATSAPP_token") || "token",
+  token: System.get_env("WHATSAPP_TOKEN") || "token",
   hsm_namespace: System.get_env("WHATSAPP_HSM_NAMESPACE") || "hsm_namespace",
   hsm_element_name: System.get_env("WHATSAPP_HSM_ELEMENT_NAME") || "hsm_element_name"
 
