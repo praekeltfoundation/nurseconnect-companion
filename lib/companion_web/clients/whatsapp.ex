@@ -39,5 +39,5 @@ defmodule CompanionWeb.Clients.Whatsapp do
     end
   end
 
-  defp raise_for_status({:error, error}), do: {:error, :client_error, error}
+  defp raise_for_status({:error, error}), do: {:error, :internal_server_error, error}
 end
