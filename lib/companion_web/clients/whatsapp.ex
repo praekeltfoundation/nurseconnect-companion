@@ -29,6 +29,29 @@ defmodule CompanionWeb.Clients.Whatsapp do
     |> raise_for_status()
   end
 
+  def contact_check(address) do
+    post("/v1/contacts", %{
+      blocking: "wait",
+      contacts: [address]
+    })
+    |> raise_for_status()
+    |> get_contact_id()
+  end
+
+  defp get_contact_id({:ok, %Tesla.Env{} = resp}) do
+    get_contact_id({:ok, resp.body})
+  end
+
+  defp get_contact_id({:ok, %{"contacts" => [%{"wa_id" => id}]}}) do
+    {:ok, id}
+  end
+
+  defp get_contact_id({:ok, %{} = _}) do
+    {:error, 404, "Cannot find WhatsApp contact"}
+  end
+
+  defp get_contact_id(error), do: error
+
   defp raise_for_status({:ok, response}) do
     case response.status do
       status when status in 200..299 ->
