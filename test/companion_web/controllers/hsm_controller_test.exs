@@ -10,7 +10,7 @@ defmodule CompanionWeb.HSMControllerTest do
     contact: %{uuid: "b8225caf-cd55-47f8-8e2f-11206571bf1f", urn: "whatsapp:27820000000"}
   }
   @invalid_create_attrs %{
-    contact: %{uuid: "b8225caf-cd55-47f8-8e2f-11206571bf1f", urn: "tel:+27820000000"}
+    contact: %{uuid: "b8225caf-cd55-47f8-8e2f-11206571bf1f", urn: "+27820000000"}
   }
   @hsm_request Poison.encode!(%{
                  to: "27820000000",
@@ -21,6 +21,10 @@ defmodule CompanionWeb.HSMControllerTest do
                    localizable_params: [%{default: "Test message"}]
                  }
                })
+  @contact_request Poison.encode!(%{
+                     contacts: ["27820000000"],
+                     blocking: "wait"
+                   })
   @bad_hsm_request Poison.encode!(%{
                      to: "27820000000",
                      type: "hsm",
@@ -48,6 +52,19 @@ defmodule CompanionWeb.HSMControllerTest do
 
       %{
         method: :post,
+        url: "https://whatsapp/v1/contacts",
+        headers: [
+          {"content-type", "application/json"},
+          {"authorization", "Bearer token"}
+        ],
+        body: @contact_request
+      } ->
+        json(%{
+          contacts: [%{wa_id: "27820000000"}]
+        })
+
+      %{
+        method: :post,
         url: "https://whatsapp/v1/messages",
         headers: [
           {"content-type", "application/json"},
@@ -55,7 +72,7 @@ defmodule CompanionWeb.HSMControllerTest do
         ],
         body: @bad_hsm_request
       } ->
-        %Tesla.Env{status: 500, body: "Error"}
+        %Tesla.Env{status: 404, body: %{"bad" => "request"}}
     end)
 
     :ok
@@ -100,7 +117,7 @@ defmodule CompanionWeb.HSMControllerTest do
         |> put_req_header("x-message-content", "Test message")
         |> post(hsm_path(conn, :create), @invalid_create_attrs)
 
-      assert %{"error" => "Invalid WhatsApp URN: tel:+27820000000"} = json_response(conn, 400)
+      assert %{"error" => "Invalid WhatsApp URN: +27820000000"} = json_response(conn, 400)
     end
 
     test "renders error when there is a client error", %{conn: conn} do
@@ -110,7 +127,7 @@ defmodule CompanionWeb.HSMControllerTest do
         |> put_req_header("x-message-content", "Bad message")
         |> post(hsm_path(conn, :create), @create_attrs)
 
-      assert "Error" = response(conn, 500)
+      assert ~s({"bad":"request"}) = response(conn, 404)
     end
   end
 end

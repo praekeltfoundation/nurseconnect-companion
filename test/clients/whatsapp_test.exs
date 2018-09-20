@@ -12,6 +12,14 @@ defmodule Companion.Clients.WhatsappTest do
                    localizable_params: [%{default: "test message"}]
                  }
                })
+  @contact_check_request Poison.encode!(%{
+                           blocking: "wait",
+                           contacts: ["27820000000"]
+                         })
+  @missing_contact_check_request Poison.encode!(%{
+                                   blocking: "wait",
+                                   contacts: ["27820000001"]
+                                 })
 
   setup do
     mock(fn
@@ -27,6 +35,32 @@ defmodule Companion.Clients.WhatsappTest do
         json(%{
           messages: [%{id: "gBEGkYiEB1VXAglK1ZEqA1YKPrU"}]
         })
+
+      %{
+        method: :post,
+        url: "https://whatsapp/v1/contacts",
+        headers: [
+          {"content-type", "application/json"},
+          {"authorization", "Bearer token"}
+        ],
+        body: @contact_check_request
+      } ->
+        json(%{
+          contacts: [%{wa_id: "27820000000"}]
+        })
+
+      %{
+        method: :post,
+        url: "https://whatsapp/v1/contacts",
+        headers: [
+          {"content-type", "application/json"},
+          {"authorization", "Bearer token"}
+        ],
+        body: @missing_contact_check_request
+      } ->
+        json(%{
+          contacts: []
+        })
     end)
 
     :ok
@@ -36,5 +70,17 @@ defmodule Companion.Clients.WhatsappTest do
     {:ok, %{body: body}} = Whatsapp.send_hsm("27820000000", "test message")
 
     assert body == %{"messages" => [%{"id" => "gBEGkYiEB1VXAglK1ZEqA1YKPrU"}]}
+  end
+
+  test "contact_check gets the wa_id of the contact" do
+    {:ok, wa_id} = Whatsapp.contact_check("27820000000")
+
+    assert wa_id == "27820000000"
+  end
+
+  test "contact_check missing contact returns error" do
+    {:error, 404, msg} = Whatsapp.contact_check("27820000001")
+
+    assert msg == "Cannot find WhatsApp contact"
   end
 end

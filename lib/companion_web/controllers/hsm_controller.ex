@@ -92,7 +92,8 @@ defmodule CompanionWeb.HSMController do
   def create(conn, %{"contact" => %{"urn" => urn}}) do
     with {:ok, address} <- get_address_from_urn(urn),
          {:ok, message} <- get_message_from_header(conn),
-         {:ok, response} <- Whatsapp.send_hsm(address, message) do
+         {:ok, wa_id} <- Whatsapp.contact_check(address),
+         {:ok, response} <- Whatsapp.send_hsm(wa_id, message) do
       conn
       |> put_status(:created)
       |> render("create.json", response: response.body)
@@ -103,12 +104,11 @@ defmodule CompanionWeb.HSMController do
     {:error, :bad_request, "Missing contact URN"}
   end
 
-  defp get_address_from_urn("whatsapp:" <> address) do
-    {:ok, address}
-  end
-
   defp get_address_from_urn(urn) do
-    {:error, :bad_request, "Invalid WhatsApp URN: #{urn}"}
+    case String.split(urn, ":") do
+      [_, address] -> {:ok, address}
+      _ -> {:error, :bad_request, "Invalid WhatsApp URN: #{urn}"}
+    end
   end
 
   defp get_message_from_header(%Plug.Conn{} = conn) do
