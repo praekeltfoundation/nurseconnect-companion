@@ -28,8 +28,13 @@ defmodule CompanionWeb.FallbackHSMController do
     |> render(CompanionWeb.HSMView, "error.json", reason: reason)
   end
 
+  def call(conn, {:error, status, %{} = reason}) do
+    conn
+    |> send_resp(status, Poison.encode!(reason))
+  end
+
   def call(conn, {:error, status, reason}) do
     conn
-    |> send_resp(status, reason)
+    |> send_resp(status, "#{reason}")
   end
 end

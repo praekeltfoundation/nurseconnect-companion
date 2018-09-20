@@ -55,7 +55,7 @@ defmodule CompanionWeb.HSMControllerTest do
         ],
         body: @bad_hsm_request
       } ->
-        %Tesla.Env{status: 500, body: "Error"}
+        %Tesla.Env{status: 404, body: %{"bad" => "request"}}
     end)
 
     :ok
@@ -110,7 +110,7 @@ defmodule CompanionWeb.HSMControllerTest do
         |> put_req_header("x-message-content", "Bad message")
         |> post(hsm_path(conn, :create), @create_attrs)
 
-      assert "Error" = response(conn, 500)
+      assert ~s({"bad":"request"}) = response(conn, 404)
     end
   end
 end
