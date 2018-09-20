@@ -22,7 +22,7 @@ defmodule CompanionWeb.HSMControllerTest do
                  }
                })
   @contact_request Poison.encode!(%{
-                     contacts: ["27820000000"],
+                     contacts: ["+27820000000"],
                      blocking: "wait"
                    })
   @bad_hsm_request Poison.encode!(%{

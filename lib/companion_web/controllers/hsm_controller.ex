@@ -106,7 +106,8 @@ defmodule CompanionWeb.HSMController do
 
   defp get_address_from_urn(urn) do
     case String.split(urn, ":") do
-      [_, address] -> {:ok, address}
+      [_, "+" <> address] -> {:ok, "+" <> address}
+      [_, address] -> {:ok, "+" <> address}
       _ -> {:error, :bad_request, "Invalid WhatsApp URN: #{urn}"}
     end
   end
