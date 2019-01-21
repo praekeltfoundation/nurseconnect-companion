@@ -126,4 +126,90 @@ defmodule Companion.CompanionWebTest do
       assert %Ecto.Changeset{} = CompanionWeb.change_opt_out(opt_out)
     end
   end
+
+  describe "templatemessages" do
+    alias Companion.CompanionWeb.TemplateMessage
+
+    @valid_attrs %{content: "some content", external_id: "some external_id", to: "some to"}
+    @update_attrs %{
+      content: "some updated content",
+      external_id: "some updated external_id",
+      to: "some updated to"
+    }
+    @invalid_attrs %{content: nil, external_id: nil, to: nil}
+
+    def template_message_fixture(attrs \\ %{}) do
+      {:ok, template_message} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> CompanionWeb.create_template_message()
+
+      template_message
+    end
+
+    test "list_templatemessages/0 returns all templatemessages" do
+      template_message = template_message_fixture()
+      [result] = CompanionWeb.list_templatemessages()
+      result = %{result | honeydew_send_template_message_lock: nil}
+
+      assert result == template_message
+    end
+
+    test "get_template_message!/1 returns the template_message with given id" do
+      template_message = template_message_fixture()
+      result = CompanionWeb.get_template_message!(template_message.id)
+      result = %{result | honeydew_send_template_message_lock: nil}
+      assert result == template_message
+    end
+
+    test "create_template_message/1 with valid data creates a template_message" do
+      assert {:ok, %TemplateMessage{} = template_message} =
+               CompanionWeb.create_template_message(@valid_attrs)
+
+      assert template_message.content == "some content"
+      assert template_message.external_id == "some external_id"
+      assert template_message.to == "some to"
+    end
+
+    test "create_template_message/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = CompanionWeb.create_template_message(@invalid_attrs)
+    end
+
+    test "update_template_message/2 with valid data updates the template_message" do
+      template_message = template_message_fixture()
+
+      assert {:ok, template_message} =
+               CompanionWeb.update_template_message(template_message, @update_attrs)
+
+      assert %TemplateMessage{} = template_message
+      assert template_message.content == "some updated content"
+      assert template_message.external_id == "some updated external_id"
+      assert template_message.to == "some updated to"
+    end
+
+    test "update_template_message/2 with invalid data returns error changeset" do
+      template_message = template_message_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               CompanionWeb.update_template_message(template_message, @invalid_attrs)
+
+      result = CompanionWeb.get_template_message!(template_message.id)
+      result = %{result | honeydew_send_template_message_lock: nil}
+      assert result == template_message
+    end
+
+    test "delete_template_message/1 deletes the template_message" do
+      template_message = template_message_fixture()
+      assert {:ok, %TemplateMessage{}} = CompanionWeb.delete_template_message(template_message)
+
+      assert_raise Ecto.NoResultsError, fn ->
+        CompanionWeb.get_template_message!(template_message.id)
+      end
+    end
+
+    test "change_template_message/1 returns a template_message changeset" do
+      template_message = template_message_fixture()
+      assert %Ecto.Changeset{} = CompanionWeb.change_template_message(template_message)
+    end
+  end
 end

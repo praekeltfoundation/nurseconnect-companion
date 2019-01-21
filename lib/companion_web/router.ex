@@ -58,6 +58,12 @@ defmodule CompanionWeb.Router do
     resources "/hsm", HSMController, only: [:create]
   end
 
+  scope "/api/v2", CompanionWeb do
+    pipe_through [:api, :authenticated]
+
+    resources "/templatemessages", TemplateMessageController, only: [:create, :show]
+  end
+
   scope "/api/docs" do
     forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :companion, swagger_file: "swagger.json"
   end
