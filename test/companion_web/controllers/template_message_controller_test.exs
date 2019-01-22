@@ -1,5 +1,6 @@
 defmodule CompanionWeb.TemplateMessageControllerTest do
   use CompanionWeb.ConnCase
+  use PhoenixSwagger.SchemaTest, "priv/static/swagger.json"
 
   alias Companion.CompanionWeb
   alias Companion.CompanionWeb.Application
@@ -22,11 +23,12 @@ defmodule CompanionWeb.TemplateMessageControllerTest do
   end
 
   describe "create template_message" do
-    test "renders template_message when data is valid", %{conn: conn} do
+    test "renders template_message when data is valid", %{conn: conn, swagger_schema: schema} do
       conn =
         conn
         |> assign(:application, @application)
         |> post(template_message_path(conn, :create, content: "some content"), @create_attrs)
+        |> validate_resp_schema(schema, "TemplateMessageResponse")
 
       assert %{"id" => id} = json_response(conn, 201)
 
