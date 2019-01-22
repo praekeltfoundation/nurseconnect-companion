@@ -5,8 +5,12 @@ defmodule CompanionWeb.TemplateMessageControllerTest do
   alias Companion.CompanionWeb.Application
 
   @application %Application{name: "test", token: Ecto.UUID.generate()}
-  @create_attrs %{content: "some content", to: "some to", external_id: "some external_id"}
-  @invalid_attrs %{content: nil, external_id: nil, to: nil}
+  @create_attrs %{
+    contact: %{urn: "whatsapp:27820000000"}
+  }
+  @invalid_attrs %{
+    contact: %{urn: "+27820000000"}
+  }
 
   def fixture(:template_message) do
     {:ok, template_message} = CompanionWeb.create_template_message(@create_attrs)
@@ -22,7 +26,7 @@ defmodule CompanionWeb.TemplateMessageControllerTest do
       conn =
         conn
         |> assign(:application, @application)
-        |> post(template_message_path(conn, :create), @create_attrs)
+        |> post(template_message_path(conn, :create, content: "some content"), @create_attrs)
 
       assert %{"id" => id} = json_response(conn, 201)
 
@@ -35,7 +39,7 @@ defmodule CompanionWeb.TemplateMessageControllerTest do
                "id" => id,
                "content" => "some content",
                "external_id" => nil,
-               "to" => "some to"
+               "to" => "+27820000000"
              }
     end
 
@@ -45,7 +49,18 @@ defmodule CompanionWeb.TemplateMessageControllerTest do
         |> assign(:application, @application)
         |> post(template_message_path(conn, :create), @invalid_attrs)
 
-      assert json_response(conn, 422)["errors"] != %{}
+      assert json_response(conn, 400) == %{"error" => "Invalid WhatsApp URN: +27820000000"}
+    end
+
+    test "renders errors when content is missing", %{conn: conn} do
+      conn =
+        conn
+        |> assign(:application, @application)
+        |> post(template_message_path(conn, :create), @create_attrs)
+
+      assert json_response(conn, 400) == %{
+               "error" => "Query string parameter 'content' is required"
+             }
     end
   end
 end
