@@ -22,7 +22,9 @@ defmodule Companion.Application do
       supervisor(CompanionWeb.Endpoint, []),
       # Jobs
       {Honeydew.EctoPollQueue, Jobs.ProcessOptOut.supervisor_config()},
-      {Honeydew.Workers, [:process_opt_out, Jobs.ProcessOptOut]}
+      {Honeydew.Workers, [:process_opt_out, Jobs.ProcessOptOut]},
+      {Honeydew.EctoPollQueue, Jobs.SendTemplateMessage.supervisor_config()},
+      {Honeydew.Workers, [:send_template_message, Jobs.SendTemplateMessage]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

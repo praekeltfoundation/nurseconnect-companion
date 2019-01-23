@@ -244,4 +244,100 @@ defmodule Companion.CompanionWeb do
     |> get_opt_out!()
     |> update_opt_out(%{status: 2})
   end
+
+  alias Companion.CompanionWeb.TemplateMessage
+
+  @doc """
+  Returns the list of templatemessages.
+
+  ## Examples
+
+      iex> list_templatemessages()
+      [%TemplateMessage{}, ...]
+
+  """
+  def list_templatemessages do
+    Repo.all(TemplateMessage)
+  end
+
+  @doc """
+  Gets a single template_message.
+
+  Raises `Ecto.NoResultsError` if the Template message does not exist.
+
+  ## Examples
+
+      iex> get_template_message!(123)
+      %TemplateMessage{}
+
+      iex> get_template_message!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_template_message!(id), do: Repo.get!(TemplateMessage, id)
+
+  @doc """
+  Creates a template_message.
+
+  ## Examples
+
+      iex> create_template_message(%{field: value})
+      {:ok, %TemplateMessage{}}
+
+      iex> create_template_message(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_template_message(attrs \\ %{}) do
+    %TemplateMessage{}
+    |> TemplateMessage.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a template_message.
+
+  ## Examples
+
+      iex> update_template_message(template_message, %{field: new_value})
+      {:ok, %TemplateMessage{}}
+
+      iex> update_template_message(template_message, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_template_message(%TemplateMessage{} = template_message, attrs) do
+    template_message
+    |> TemplateMessage.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TemplateMessage.
+
+  ## Examples
+
+      iex> delete_template_message(template_message)
+      {:ok, %TemplateMessage{}}
+
+      iex> delete_template_message(template_message)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_template_message(%TemplateMessage{} = template_message) do
+    Repo.delete(template_message)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking template_message changes.
+
+  ## Examples
+
+      iex> change_template_message(template_message)
+      %Ecto.Changeset{source: %TemplateMessage{}}
+
+  """
+  def change_template_message(%TemplateMessage{} = template_message) do
+    TemplateMessage.changeset(template_message, %{})
+  end
 end
