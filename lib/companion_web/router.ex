@@ -39,6 +39,7 @@ defmodule CompanionWeb.Router do
     get "/", ApplicationController, :index
     resources "/applications", ApplicationController, only: [:create, :delete]
     resources "/optouts", OptOutController, only: [:index]
+    resources "/flowgenerator", FlowGeneratorController, only: [:index, :create]
   end
 
   scope "/auth", CompanionWeb do

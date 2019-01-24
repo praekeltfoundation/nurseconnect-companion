@@ -1,0 +1,40 @@
+<form method="post">
+    <input name="_csrf_token" type="hidden" value="<%= get_csrf_token() %>">
+    <div class="form-group">
+        <label for=applicationSelect>Application</label>
+        <select class="form-control" id="applicationSelect" name="application">
+        <%= for application <- @applications do %>
+            <option value="<%= application.id %>"><%= application.name %></option>
+        <% end %>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="whatsappContent">WhatsApp Content</label>
+        <textarea class="form-control" id="whatsappContent" rows=3 required name="whatsapp" oninput="generate_url()"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="smsContent">SMS Content</label>
+        <textarea class="form-control" id="smsContent" rows=3 required name="sms"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="sendDate">Send Date</label>
+        <input type="date" class="form-control" id="sendDate" required name="date" />
+    </div>
+    <button class="btn btn-primary" type="submit">Generate Flow</button>
+</form>
+
+<div class="form-group">
+    <label for="hookUrl">Webhook URL</label>
+    <input class="form-control" readonly id="hookUrl" onClick="this.select();"/>
+</div>
+
+<script>
+var input = document.getElementById("whatsappContent");
+var output = document.getElementById("hookUrl");
+var url = new URL("<%= template_message_url(@conn, :create) %>");
+function generate_url(){
+    url.searchParams.set("content", input.value);
+    output.value = url.toString();
+}
+generate_url();
+</script>
