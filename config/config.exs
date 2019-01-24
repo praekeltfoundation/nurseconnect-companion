@@ -55,7 +55,11 @@ config :honeydew,
 # Rapidpro config
 config :companion, :rapidpro,
   url: System.get_env("RAPIDPRO_URL") || "http://rapidpro",
-  token: System.get_env("RAPIDPRO_TOKEN") || "rapidprotoken"
+  token: System.get_env("RAPIDPRO_TOKEN") || "rapidprotoken",
+  sms_channel_id: System.get_env("RAPIDPRO_SMS_CHANNEL_ID") || "sms-channel-uuid",
+  sms_channel_name: System.get_env("RAPIDPRO_SMS_CHANNEL_NAME") || "Junebug: *12345",
+  whatsapp_channel_id: System.get_env("RAPIDPRO_WHATSAPP_CHANNEL_ID") || "sms-channel-uuid",
+  whatsapp_channel_name: System.get_env("RAPIDPRO_WHATSAPP_CHANNEL_NAME") || "WhatsApp: +12345"
 
 # Jembi config
 config :companion, :openhim,

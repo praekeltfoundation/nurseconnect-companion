@@ -1,0 +1,121 @@
+{
+  "version": "11.4",
+  "site": "<%= Application.get_env(:companion, :rapidpro)[:url] %>",
+  "flows": [
+    {
+      "entry": "<%= @rule_set_id %>",
+      "action_sets": [
+        {
+          "uuid": "<%= @sms_action_id %>",
+          "x": 421,
+          "y": 179,
+          "destination": null,
+          "actions": [
+            {
+              "type": "channel",
+              "uuid": "<%= Ecto.UUID.generate %>",
+              "channel": "<%= Application.get_env(:companion, :rapidpro)[:sms_channel_id] %>",
+              "name": "<%= Application.get_env(:companion, :rapidpro)[:sms_channel_name] %>"
+            },
+            {
+              "type": "reply",
+              "uuid": "<%= Ecto.UUID.generate %>",
+              "msg": {
+                "base": "<%= @form["sms"] %>"
+              },
+              "media": {},
+              "quick_replies": [],
+              "send_all": false
+            }
+          ],
+          "exit_uuid": "<%= Ecto.UUID.generate %>"
+        },
+        {
+          "uuid": "<%= @whatsapp_action_id %>",
+          "x": 114,
+          "y": 210,
+          "destination": null,
+          "actions": [
+            {
+              "type": "channel",
+              "uuid": "<%= Ecto.UUID.generate %>",
+              "channel": "<%= Application.get_env(:companion, :rapidpro)[:whatsapp_channel_id] %>",
+              "name": "<%= Application.get_env(:companion, :rapidpro)[:whatsapp_channel_name] %>"
+            },
+            {
+              "type": "api",
+              "uuid": "<%= Ecto.UUID.generate %>",
+              "webhook": "<%= template_message_url(@conn, :create, content: @form["whatsapp"]) %>",
+              "action": "POST",
+              "webhook_headers": [
+                {
+                  "name": "Authorization",
+                  "value": "Token <%= @application.token %>"
+                },
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            }
+          ],
+          "exit_uuid": "<%= Ecto.UUID.generate %>"
+        }
+      ],
+      "rule_sets": [
+        {
+          "uuid": "<%= @rule_set_id %>",
+          "x": 248,
+          "y": 0,
+          "label": "Preferred Channel",
+          "rules": [
+            {
+              "uuid": "<%= Ecto.UUID.generate %>",
+              "category": {
+                "base": "Whatsapp"
+              },
+              "destination": "<%= @whatsapp_action_id %>",
+              "destination_type": "A",
+              "test": {
+                "type": "contains_any",
+                "test": {
+                  "base": "whatsapp"
+                }
+              },
+              "label": null
+            },
+            {
+              "uuid": "<%= Ecto.UUID.generate %>",
+              "category": {
+                "base": "Other"
+              },
+              "destination": "<%= @sms_action_id %>",
+              "destination_type": "A",
+              "test": {
+                "type": "true"
+              },
+              "label": null
+            }
+          ],
+          "finished_key": null,
+          "ruleset_type": "contact_field",
+          "response_type": "",
+          "operand": "@contact.preferred_channel",
+          "config": {}
+        }
+      ],
+      "base_language": "base",
+      "flow_type": "F",
+      "version": "11.4",
+      "metadata": {
+        "name": "NurseConnect Send <%= @form["date"] %>",
+        "saved_on": "<%= DateTime.utc_now |> DateTime.to_iso8601 %>",
+        "revision": 1,
+        "uuid": "<%= Ecto.UUID.generate %>",
+        "expires": 10080
+      }
+    }
+  ],
+  "campaigns": [],
+  "triggers": []
+}
