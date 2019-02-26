@@ -27,7 +27,15 @@ defmodule CompanionWeb.TemplateMessageControllerTest do
       conn =
         conn
         |> assign(:application, @application)
-        |> post(template_message_path(conn, :create, content: "some content"), @create_attrs)
+        |> post(
+          template_message_path(
+            conn,
+            :create,
+            template: "some template",
+            variable: ["some", "variables"]
+          ),
+          @create_attrs
+        )
         |> validate_resp_schema(schema, "TemplateMessageResponse")
 
       assert %{"id" => id} = json_response(conn, 201)
@@ -39,7 +47,8 @@ defmodule CompanionWeb.TemplateMessageControllerTest do
 
       assert json_response(conn, 200) == %{
                "id" => id,
-               "content" => "some content",
+               "template" => "some template",
+               "variables" => ["some", "variables"],
                "external_id" => nil,
                "to" => "+27820000000"
              }
@@ -61,7 +70,7 @@ defmodule CompanionWeb.TemplateMessageControllerTest do
         |> post(template_message_path(conn, :create), @create_attrs)
 
       assert json_response(conn, 400) == %{
-               "error" => "Query string parameter 'content' is required"
+               "error" => "Query string parameter 'template' is required"
              }
     end
   end

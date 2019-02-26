@@ -42,7 +42,8 @@ defmodule CompanionWeb.TemplateMessageController do
           properties do
             id(:integer, "ID of the sent message", format: :integer)
             to(:string, "The to address that the message will be sent to", format: :string)
-            content(:string, "The content of the message", format: :string)
+            template(:string, "The template to use for the message", format: :string)
+            variables(:array, "The list of variables to fill into the template", format: :array)
 
             external_id(
               :string,
@@ -56,7 +57,8 @@ defmodule CompanionWeb.TemplateMessageController do
             to: "+27820000000",
             id: 11,
             external_id: "gBEGkYiEB1VXAglK1ZEqA1YKPrU",
-            content: "Test content"
+            template: "template_name",
+            variables: ["variable1", "variable2"]
           })
         end
     }
@@ -69,11 +71,19 @@ defmodule CompanionWeb.TemplateMessageController do
     produces("application/json")
 
     parameter(
-      "content",
+      "template",
       :query,
       :string,
-      "Message content for the template message",
+      "Which template to use for this message",
       required: true
+    )
+
+    parameter(
+      "variable[]",
+      :query,
+      :string,
+      "Each instance adds another variable to insert into the template",
+      required: false
     )
 
     parameters do
@@ -93,9 +103,14 @@ defmodule CompanionWeb.TemplateMessageController do
 
   def create(conn, %{"contact" => %{"urn" => urn}}) do
     with {:ok, address} <- get_address_from_urn(urn),
-         {:ok, message} <- get_content_from_query_string(conn),
+         {:ok, variables} <- get_variables_from_query_string(conn),
+         {:ok, template} <- get_template_from_query_string(conn),
          {:ok, templatemessage} <-
-           CompanionWeb.create_template_message(%{to: address, content: message}) do
+           CompanionWeb.create_template_message(%{
+             to: address,
+             template: template,
+             variables: variables
+           }) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", template_message_path(conn, :show, templatemessage))
@@ -111,13 +126,24 @@ defmodule CompanionWeb.TemplateMessageController do
     end
   end
 
-  defp get_content_from_query_string(conn) do
+  defp get_template_from_query_string(conn) do
     conn = conn |> fetch_query_params()
 
-    case conn.query_params["content"] do
-      nil -> {:error, :bad_request, "Query string parameter 'content' is required"}
-      "" -> {:error, :bad_request, "Query string parameter 'content' cannot be empty"}
+    case conn.query_params["template"] do
+      nil -> {:error, :bad_request, "Query string parameter 'template' is required"}
+      "" -> {:error, :bad_request, "Query string parameter 'template' cannot be empty"}
       content -> {:ok, content}
+    end
+  end
+
+  defp get_variables_from_query_string(conn) do
+    conn = conn |> fetch_query_params()
+
+    case conn.query_params["variable"] do
+      nil -> {:ok, []}
+      "" -> {:ok, []}
+      [h | t] -> {:ok, [h | t]}
+      content -> {:ok, [content]}
     end
   end
 

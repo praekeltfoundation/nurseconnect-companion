@@ -10,7 +10,8 @@ defmodule CompanionWeb.TemplateMessageView do
     %{
       id: template_message.id,
       to: template_message.to,
-      content: template_message.content,
+      template: template_message.template,
+      variables: template_message.variables,
       external_id: template_message.external_id
     }
   end

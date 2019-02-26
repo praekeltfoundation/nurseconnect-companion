@@ -52,7 +52,13 @@ defmodule Companion.Jobs.SendTemplateMessageTests do
   end
 
   test "Sends the templated message" do
-    {:ok, message} = create_template_message(%{content: "Test message", to: "+27820000000"})
+    {:ok, message} =
+      create_template_message(%{
+        template: "hsm_element_name",
+        to: "+27820000000",
+        variables: ["Test message"]
+      })
+
     SendTemplateMessage.run(message.id)
     message = get_template_message!(message.id)
     assert message.external_id == "gBEGkYiEB1VXAglK1ZEqA1YKPrU"

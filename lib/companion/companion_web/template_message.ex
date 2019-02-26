@@ -7,9 +7,10 @@ defmodule Companion.CompanionWeb.TemplateMessage do
   import Honeydew.EctoPollQueue.Schema
 
   schema "templatemessages" do
-    field(:content, :string)
     field(:external_id, :string)
     field(:to, :string)
+    field(:template, :string)
+    field(:variables, {:array, :string})
 
     timestamps()
 
@@ -19,7 +20,7 @@ defmodule Companion.CompanionWeb.TemplateMessage do
   @doc false
   def changeset(template_message, attrs) do
     template_message
-    |> cast(attrs, [:to, :content, :external_id])
-    |> validate_required([:to, :content])
+    |> cast(attrs, [:to, :external_id, :template, :variables])
+    |> validate_required([:to, :template, :variables])
   end
 end

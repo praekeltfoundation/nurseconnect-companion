@@ -28,12 +28,14 @@ defmodule CompanionWeb.FlowGeneratorControllerTest do
           application: application.id,
           date: "2018-01-01",
           sms: "sms body",
-          whatsapp: "whatsapp body"
+          whatsapp_template: "whatsapp template",
+          whatsapp_variable: ["var1", "var2"]
         })
 
       [content_disposition_header] = get_resp_header(conn, "content-disposition")
       assert content_disposition_header == "attachment; filename=send_2018-01-01.json"
-      response = json_response(conn, 200)
+      response = html_response(conn, 200)
+      response = Poison.decode!(response)
       assert response["site"] == "http://rapidpro"
 
       assert response
@@ -54,7 +56,12 @@ defmodule CompanionWeb.FlowGeneratorControllerTest do
              |> Map.fetch!("actions")
              |> Enum.at(1)
              |> Map.fetch!("webhook") ==
-               template_message_url(conn, :create, content: "whatsapp body")
+               template_message_url(
+                 conn,
+                 :create,
+                 template: "whatsapp template",
+                 variable: ["var1", "var2"]
+               )
 
       assert response
              |> Map.fetch!("flows")

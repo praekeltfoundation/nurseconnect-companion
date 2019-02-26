@@ -16,14 +16,14 @@ defmodule CompanionWeb.Clients.Whatsapp do
   @doc """
   Given the address and message, sends the HSM
   """
-  def send_hsm(to, message) do
+  def send_hsm(to, template, variables) do
     post("/v1/messages", %{
       to: to,
       type: "hsm",
       hsm: %{
         namespace: Application.get_env(:companion, :whatsapp)[:hsm_namespace],
-        element_name: Application.get_env(:companion, :whatsapp)[:hsm_element_name],
-        localizable_params: [%{default: message}]
+        element_name: template,
+        localizable_params: Enum.map(variables, fn v -> %{default: v} end)
       }
     })
     |> raise_for_status()
