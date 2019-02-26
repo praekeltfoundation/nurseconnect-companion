@@ -45,7 +45,7 @@
             {
               "type": "api",
               "uuid": "<%= Ecto.UUID.generate %>",
-              "webhook": "<%= template_message_url(@conn, :create, content: @form["whatsapp"]) %>",
+              "webhook": "<%= template_message_url(@conn, :create, template: @form["whatsapp_template"], variable: @form["whatsapp_variable"]) %>",
               "action": "POST",
               "webhook_headers": [
                 {

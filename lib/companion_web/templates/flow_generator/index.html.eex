@@ -9,13 +9,25 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="whatsappContent">WhatsApp Content</label>
-        <textarea class="form-control" id="whatsappContent" rows=3 required name="whatsapp" oninput="generate_url()"></textarea>
-    </div>
-    <div class="form-group">
         <label for="smsContent">SMS Content</label>
         <textarea class="form-control" id="smsContent" rows=3 required name="sms"></textarea>
     </div>
+    <div class="form-group">
+        <label for="whatsappTemplate">WhatsApp Template</label>
+        <input type="text" class="form-control" id="whatsappTemplate" required name="whatsapp_template" oninput="generate_url()"></input>
+    </div>
+    <div class="form-group" id="variables">
+        <label>WhatsApp Variables</label>
+        <input type="text" class="form-control" name="whatsapp_variable[]" oninput="generate_url()"></input>
+        <button class="btn btn-success add-more" type="button" id="add_variable" onclick="addVariable()"><i class="fa fa-plus"></i></button>
+    </div>
+
+    <!-- This is the div we copy to add more variable inputs -->
+    <div class="input-group hide" id="whatsapp_variable_input">
+        <input type="text" class="form-control" oninput="generate_url()"></input>
+        <button class="btn btn-danger" type="button" onclick="removeVariable(this)"><i class="fa fa-times"></i></button>
+    </div>
+
     <div class="form-group">
         <label for="sendDate">Send Date</label>
         <input type="date" class="form-control" id="sendDate" required name="date" />
@@ -29,12 +41,32 @@
 </div>
 
 <script>
-var input = document.getElementById("whatsappContent");
+var template = document.getElementById("whatsappTemplate");
 var output = document.getElementById("hookUrl");
 var url = new URL("<%= template_message_url(@conn, :create) %>");
 function generate_url(){
-    url.searchParams.set("content", input.value);
+    var variables = document.getElementById("variables").getElementsByTagName("input");
+    url.searchParams.delete("variable[]");
+    for (const v of variables) {
+        url.searchParams.append("variable[]", v.value);
+    }
+    url.searchParams.set("template", template.value);
     output.value = url.toString();
+}
+function addVariable(){
+    var variables = document.getElementById("variables");
+    var variable = document.getElementById("whatsapp_variable_input").cloneNode(true);
+    variable.classList.remove("hide");
+    variable.firstElementChild.value = "";
+    variable.firstElementChild.name = "whatsapp_variable[]";
+    // Add before the button
+    variables.insertBefore(variable, document.getElementById("add_variable"));
+    generate_url();
+}
+function removeVariable(node) {
+    var variable = node.parentNode;
+    variable.parentNode.removeChild(variable);
+    generate_url();
 }
 generate_url();
 </script>
