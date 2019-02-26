@@ -25,7 +25,7 @@ defmodule Companion.Jobs.SendTemplateMessage do
   def run(id) do
     with message = get_template_message!(id),
          {:ok, wa_id} <- Whatsapp.contact_check(message.to),
-         {:ok, response} <- Whatsapp.send_hsm(wa_id, message.content),
+         {:ok, response} <- Whatsapp.send_hsm(wa_id, message.template, message.variables),
          [whatsapp_message] <- response.body["messages"],
          {:ok, _} <- update_template_message(message, %{external_id: whatsapp_message["id"]}) do
       {:ok}

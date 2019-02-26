@@ -93,7 +93,12 @@ defmodule CompanionWeb.HSMController do
     with {:ok, address} <- get_address_from_urn(urn),
          {:ok, message} <- get_message_from_header(conn),
          {:ok, wa_id} <- Whatsapp.contact_check(address),
-         {:ok, response} <- Whatsapp.send_hsm(wa_id, message) do
+         {:ok, response} <-
+           Whatsapp.send_hsm(
+             wa_id,
+             Application.get_env(:companion, :whatsapp)[:hsm_element_name],
+             [message]
+           ) do
       conn
       |> put_status(:created)
       |> render("create.json", response: response.body)

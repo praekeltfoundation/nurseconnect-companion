@@ -130,13 +130,19 @@ defmodule Companion.CompanionWebTest do
   describe "templatemessages" do
     alias Companion.CompanionWeb.TemplateMessage
 
-    @valid_attrs %{content: "some content", external_id: "some external_id", to: "some to"}
-    @update_attrs %{
-      content: "some updated content",
-      external_id: "some updated external_id",
-      to: "some updated to"
+    @valid_attrs %{
+      template: "some template",
+      external_id: "some external_id",
+      to: "some to",
+      variables: ["some", "variables"]
     }
-    @invalid_attrs %{content: nil, external_id: nil, to: nil}
+    @update_attrs %{
+      template: "some updated template",
+      external_id: "some updated external_id",
+      to: "some updated to",
+      variables: ["some", "updated", "variables"]
+    }
+    @invalid_attrs %{template: nil, external_id: nil, to: nil}
 
     def template_message_fixture(attrs \\ %{}) do
       {:ok, template_message} =
@@ -166,9 +172,10 @@ defmodule Companion.CompanionWebTest do
       assert {:ok, %TemplateMessage{} = template_message} =
                CompanionWeb.create_template_message(@valid_attrs)
 
-      assert template_message.content == "some content"
+      assert template_message.template == "some template"
       assert template_message.external_id == "some external_id"
       assert template_message.to == "some to"
+      assert template_message.variables == ["some", "variables"]
     end
 
     test "create_template_message/1 with invalid data returns error changeset" do
@@ -182,9 +189,10 @@ defmodule Companion.CompanionWebTest do
                CompanionWeb.update_template_message(template_message, @update_attrs)
 
       assert %TemplateMessage{} = template_message
-      assert template_message.content == "some updated content"
+      assert template_message.template == "some updated template"
       assert template_message.external_id == "some updated external_id"
       assert template_message.to == "some updated to"
+      assert template_message.variables == ["some", "updated", "variables"]
     end
 
     test "update_template_message/2 with invalid data returns error changeset" do

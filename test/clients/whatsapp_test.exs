@@ -67,7 +67,7 @@ defmodule Companion.Clients.WhatsappTest do
   end
 
   test "send_hsm makes a request to send the templated message" do
-    {:ok, %{body: body}} = Whatsapp.send_hsm("27820000000", "test message")
+    {:ok, %{body: body}} = Whatsapp.send_hsm("27820000000", "hsm_element_name", ["test message"])
 
     assert body == %{"messages" => [%{"id" => "gBEGkYiEB1VXAglK1ZEqA1YKPrU"}]}
   end
