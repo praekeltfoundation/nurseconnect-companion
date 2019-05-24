@@ -18,7 +18,11 @@ defmodule CompanionWeb.HSMControllerTest do
                  hsm: %{
                    namespace: "hsm_namespace",
                    element_name: "hsm_element_name",
-                   localizable_params: [%{default: "Test message"}]
+                   localizable_params: [%{default: "Test message"}],
+                   language: %{
+                     policy: "deterministic",
+                     code: "en"
+                   }
                  }
                })
   @contact_request Poison.encode!(%{
@@ -31,7 +35,11 @@ defmodule CompanionWeb.HSMControllerTest do
                      hsm: %{
                        namespace: "hsm_namespace",
                        element_name: "hsm_element_name",
-                       localizable_params: [%{default: "Bad message"}]
+                       localizable_params: [%{default: "Bad message"}],
+                       language: %{
+                         policy: "deterministic",
+                         code: "en"
+                       }
                      }
                    })
 

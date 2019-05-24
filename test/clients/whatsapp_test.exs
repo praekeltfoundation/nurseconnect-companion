@@ -9,7 +9,11 @@ defmodule Companion.Clients.WhatsappTest do
                  hsm: %{
                    namespace: "hsm_namespace",
                    element_name: "hsm_element_name",
-                   localizable_params: [%{default: "test message"}]
+                   localizable_params: [%{default: "test message"}],
+                   language: %{
+                     policy: "deterministic",
+                     code: "en"
+                   }
                  }
                })
   @contact_check_request Poison.encode!(%{

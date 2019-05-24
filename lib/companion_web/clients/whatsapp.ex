@@ -24,7 +24,11 @@ defmodule CompanionWeb.Clients.Whatsapp do
       hsm: %{
         namespace: Application.get_env(:companion, :whatsapp)[:hsm_namespace],
         element_name: template,
-        localizable_params: Enum.map(variables, fn v -> %{default: v} end)
+        localizable_params: Enum.map(variables, fn v -> %{default: v} end),
+        language: %{
+          policy: "deterministic",
+          code: "en"
+        }
       }
     })
     |> raise_for_status()

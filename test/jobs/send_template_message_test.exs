@@ -11,7 +11,11 @@ defmodule Companion.Jobs.SendTemplateMessageTests do
                  hsm: %{
                    namespace: "hsm_namespace",
                    element_name: "hsm_element_name",
-                   localizable_params: [%{default: "Test message"}]
+                   localizable_params: [%{default: "Test message"}],
+                   language: %{
+                     policy: "deterministic",
+                     code: "en"
+                   }
                  }
                })
   @contact_request Poison.encode!(%{
