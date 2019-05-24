@@ -17,6 +17,8 @@ jobs:
     # Run elixir tests
     - elixir: '1.6'
       otp_release: '20.3'
+      services:
+        - postgresql
 
     # Run dialyzer
     - elixir: '1.6'

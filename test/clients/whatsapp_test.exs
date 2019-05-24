@@ -9,7 +9,11 @@ defmodule Companion.Clients.WhatsappTest do
                  hsm: %{
                    namespace: "hsm_namespace",
                    element_name: "hsm_element_name",
-                   localizable_params: [%{default: "test message"}]
+                   localizable_params: [%{default: "test message"}],
+                   language: %{
+                     policy: "deterministic",
+                     code: "en"
+                   }
                  }
                })
   @contact_check_request Poison.encode!(%{
@@ -28,7 +32,8 @@ defmodule Companion.Clients.WhatsappTest do
         url: "https://whatsapp/v1/messages",
         headers: [
           {"content-type", "application/json"},
-          {"authorization", "Bearer token"}
+          {"authorization", "Bearer token"},
+          {"user-agent", "nurseconnect-companion"}
         ],
         body: @hsm_request
       } ->
@@ -41,7 +46,8 @@ defmodule Companion.Clients.WhatsappTest do
         url: "https://whatsapp/v1/contacts",
         headers: [
           {"content-type", "application/json"},
-          {"authorization", "Bearer token"}
+          {"authorization", "Bearer token"},
+          {"user-agent", "nurseconnect-companion"}
         ],
         body: @contact_check_request
       } ->
@@ -54,7 +60,8 @@ defmodule Companion.Clients.WhatsappTest do
         url: "https://whatsapp/v1/contacts",
         headers: [
           {"content-type", "application/json"},
-          {"authorization", "Bearer token"}
+          {"authorization", "Bearer token"},
+          {"user-agent", "nurseconnect-companion"}
         ],
         body: @missing_contact_check_request
       } ->
