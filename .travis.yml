@@ -51,7 +51,7 @@ jobs:
         - IMAGE_NAME=praekeltfoundation/nurseconnect-companion:develop
         - REGISTRY_USER=praekeltorgdeploy
         # REGISTRY_PASS
-        - secure: "APKendLhPMuHBp85v/1R8umrhxhLCe3R9BMnTkbBFzCKet+5w00oWiIolUTo/ctZE7jfC0b911uVnKUZ0MgcoKlF9Q2aQdNZvTDim89clTByXC8/ftswl4wfw0fOeMjiKn+fE9jyIiILBC1x4f0dU+UedOWHrpRKWknH+/Cq/SCJxWuYUEqhiBTTRny16gW44/HKmgw2dCoFIioDhGuwfVI2JHJflo//dzMcfclUOW9ZoIeK+tsQxOFpKYYDLkcPXCQxxSWxFFL8AZlbDQeYKLqH8jOa/c5lM/vs0YEoObmu9LfIDj8VMrHENuto5kzAKNFXgWOS4LKwunNG3yj5VB0o8uOYGYDE4sLxhyvrTwkaza7I+zlmb2kPnp0L4eCVvXxdcl0BBw6H1/k85qGu7bXJdaA3RdcsSfS/S6pRCKE4UfHRF8zulHRgREv1szpHOvHpyeiU3fhbJSl+ExXrM37sJ1CQmMFh1hEoc5Av9JkNCnEoBWfx6HHd9fcSvbwuIzZHq1V5I8rLUTLcrktszW/4hk9aXqaupqP0VdcBaXATLIFDQXe8ygfPO9iQ9g1O9wRz2/sr9iu6/Jbt2zoH56szErpSvfAsLM8toZgx4LPmcAJgFTh6D4ly/22UKT6Oqk4Wyc7/OVKc9pNuk3V4tQ8zxiy3aHU4W239Fv5RPks="
+        - secure: "BPynv+l1VNq4/km0y1q0lkAPLP+IPfyDmFITJlZdhFyKqT5YutWTQrXxGnfSXqyiNpF9JjuIdx6qCMN0UXt8lM3vRV6UorTHGfc+aoceXMFzcLJSZv2yafA90IUPIooDE0A7hqEvNkrkQwRG1kxY5B2HXaV5vFx+9tZr+uvaCn+MX9ihszFDLP0LT601X+cZA1mdk+9+SKvPYpxsjABOethvXj1qKkwoRTvVk3Y8fhldmuYjZhyKP/t63snL+g9kaigBQKBX+/EjjO4mOcEAGKvpOp18Lkyj0M524NRFDb3viSYMlDM42sSUK5E3y5hRV+a2hwCOqcP9J27QTjtfX1DzOyOZ20HJQTHFbliGhmf2UcHAjVbhZTJZRs1b039u//7j2h7P2MyLzOqJ1++7B2jgn2yjKw7zDRTVzt6HOZe5hyGA65Tl/M65vSqnRuXsBVX4Oo0suVZH7I4bWeblicHmN+zoF7LuvkmMMWjIAVSUgM8A21te76l5+zm3Q+iZj0CziBIAVoFcMJgi+RfPq0tbGOL2DkseXGUTJZoyIa6XAZSllXzjmaU7fSKVhPolYYYeDWS/39vWDgC0VBUgZMdl2kmuXCCWGkxuguo3qJuiBpvlWSQHaaN5SvxfcwUz35weTe2ekG5lh6VROc0hZTIkLZP3DpJ1EOx65tvOYYw="
       before_script:
         - docker pull "$IMAGE_NAME" || true
         - pip install -U pip
