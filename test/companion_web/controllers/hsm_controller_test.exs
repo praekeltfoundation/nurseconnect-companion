@@ -42,7 +42,8 @@ defmodule CompanionWeb.HSMControllerTest do
         url: "https://whatsapp/v1/messages",
         headers: [
           {"content-type", "application/json"},
-          {"authorization", "Bearer token"}
+          {"authorization", "Bearer token"},
+          {"user-agent", "nurseconnect-companion"}
         ],
         body: @hsm_request
       } ->
@@ -55,7 +56,8 @@ defmodule CompanionWeb.HSMControllerTest do
         url: "https://whatsapp/v1/contacts",
         headers: [
           {"content-type", "application/json"},
-          {"authorization", "Bearer token"}
+          {"authorization", "Bearer token"},
+          {"user-agent", "nurseconnect-companion"}
         ],
         body: @contact_request
       } ->
@@ -68,7 +70,8 @@ defmodule CompanionWeb.HSMControllerTest do
         url: "https://whatsapp/v1/messages",
         headers: [
           {"content-type", "application/json"},
-          {"authorization", "Bearer token"}
+          {"authorization", "Bearer token"},
+          {"user-agent", "nurseconnect-companion"}
         ],
         body: @bad_hsm_request
       } ->

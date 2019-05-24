@@ -28,7 +28,8 @@ defmodule Companion.Clients.WhatsappTest do
         url: "https://whatsapp/v1/messages",
         headers: [
           {"content-type", "application/json"},
-          {"authorization", "Bearer token"}
+          {"authorization", "Bearer token"},
+          {"user-agent", "nurseconnect-companion"}
         ],
         body: @hsm_request
       } ->
@@ -41,7 +42,8 @@ defmodule Companion.Clients.WhatsappTest do
         url: "https://whatsapp/v1/contacts",
         headers: [
           {"content-type", "application/json"},
-          {"authorization", "Bearer token"}
+          {"authorization", "Bearer token"},
+          {"user-agent", "nurseconnect-companion"}
         ],
         body: @contact_check_request
       } ->
@@ -54,7 +56,8 @@ defmodule Companion.Clients.WhatsappTest do
         url: "https://whatsapp/v1/contacts",
         headers: [
           {"content-type", "application/json"},
-          {"authorization", "Bearer token"}
+          {"authorization", "Bearer token"},
+          {"user-agent", "nurseconnect-companion"}
         ],
         body: @missing_contact_check_request
       } ->

@@ -8,7 +8,8 @@ defmodule CompanionWeb.Clients.Whatsapp do
   plug Tesla.Middleware.JSON, engine: Poison
 
   plug Tesla.Middleware.Headers, [
-    {"authorization", "Bearer " <> Application.get_env(:companion, :whatsapp)[:token]}
+    {"authorization", "Bearer " <> Application.get_env(:companion, :whatsapp)[:token]},
+    {"user-agent", "nurseconnect-companion"}
   ]
 
   plug Tesla.Middleware.Logger
