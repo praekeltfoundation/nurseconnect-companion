@@ -11,7 +11,7 @@ RUN mix deps.get
 RUN mix deps.compile
 
 # Build node app
-FROM node:7 as node
+FROM node:8 as node
 
 COPY assets assets
 COPY --from=elixir deps/phoenix deps/phoenix
