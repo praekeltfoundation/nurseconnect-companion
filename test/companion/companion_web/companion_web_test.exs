@@ -220,4 +220,108 @@ defmodule Companion.CompanionWebTest do
       assert %Ecto.Changeset{} = CompanionWeb.change_template_message(template_message)
     end
   end
+
+  describe "registrations" do
+    alias Companion.CompanionWeb.Registration
+
+    @valid_attrs %{
+      channel: "some channel",
+      facility_code: "some facility_code",
+      msisdn: "some msisdn",
+      persal: "some persal",
+      registered_by: "some registered_by",
+      sanc: "some sanc",
+      timestamp: "2018-01-01T01:01:01.000000"
+    }
+    @update_attrs %{
+      channel: "some updated channel",
+      facility_code: "some updated facility_code",
+      msisdn: "some updated msisdn",
+      persal: "some updated persal",
+      registered_by: "some updated registered_by",
+      sanc: "some updated sanc",
+      timestamp: "2018-01-01T01:01:01.000000"
+    }
+    @invalid_attrs %{
+      channel: nil,
+      facility_code: nil,
+      msisdn: nil,
+      persal: nil,
+      registered_by: nil,
+      sanc: nil
+    }
+
+    def registration_fixture(attrs \\ %{}) do
+      {:ok, registration} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> CompanionWeb.create_registration()
+
+      registration
+    end
+
+    test "list_registrations/0 returns all registrations" do
+      registration = registration_fixture()
+      [result] = CompanionWeb.list_registrations()
+      result = %{result | honeydew_process_registration_lock: nil}
+      assert result == registration
+    end
+
+    test "get_registration!/1 returns the registration with given id" do
+      registration = registration_fixture()
+      result = CompanionWeb.get_registration!(registration.id)
+      result = %{result | honeydew_process_registration_lock: nil}
+      assert result == registration
+    end
+
+    test "create_registration/1 with valid data creates a registration" do
+      assert {:ok, %Registration{} = registration} =
+               CompanionWeb.create_registration(@valid_attrs)
+
+      assert registration.channel == "some channel"
+      assert registration.facility_code == "some facility_code"
+      assert registration.msisdn == "some msisdn"
+      assert registration.persal == "some persal"
+      assert registration.registered_by == "some registered_by"
+      assert registration.sanc == "some sanc"
+    end
+
+    test "create_registration/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = CompanionWeb.create_registration(@invalid_attrs)
+    end
+
+    test "update_registration/2 with valid data updates the registration" do
+      registration = registration_fixture()
+      assert {:ok, registration} = CompanionWeb.update_registration(registration, @update_attrs)
+      assert %Registration{} = registration
+      assert registration.channel == "some updated channel"
+      assert registration.facility_code == "some updated facility_code"
+      assert registration.msisdn == "some updated msisdn"
+      assert registration.persal == "some updated persal"
+      assert registration.registered_by == "some updated registered_by"
+      assert registration.sanc == "some updated sanc"
+    end
+
+    test "update_registration/2 with invalid data returns error changeset" do
+      registration = registration_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               CompanionWeb.update_registration(registration, @invalid_attrs)
+
+      result = CompanionWeb.get_registration!(registration.id)
+      result = %{result | honeydew_process_registration_lock: nil}
+      assert registration == result
+    end
+
+    test "delete_registration/1 deletes the registration" do
+      registration = registration_fixture()
+      assert {:ok, %Registration{}} = CompanionWeb.delete_registration(registration)
+      assert_raise Ecto.NoResultsError, fn -> CompanionWeb.get_registration!(registration.id) end
+    end
+
+    test "change_registration/1 returns a registration changeset" do
+      registration = registration_fixture()
+      assert %Ecto.Changeset{} = CompanionWeb.change_registration(registration)
+    end
+  end
 end
