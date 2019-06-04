@@ -24,7 +24,7 @@ defmodule CompanionWeb.RegistrationController do
             persal(:string, "Persal code of person registered", required: false)
             sanc(:string, "SANC code of person registered", required: false)
 
-            timestamp(:timestamp, "UTC timestamp of when the registration occurred",
+            timestamp(:string, "UTC timestamp of when the registration occurred",
               format: :utc_datetime
             )
           end

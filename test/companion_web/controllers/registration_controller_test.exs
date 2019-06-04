@@ -1,5 +1,6 @@
 defmodule CompanionWeb.RegistrationControllerTest do
   use CompanionWeb.ConnCase
+  use PhoenixSwagger.SchemaTest, "priv/static/swagger.json"
 
   alias Companion.CompanionWeb.Application
 
