@@ -10,6 +10,10 @@ defmodule CompanionWeb.Clients.OpenHIM do
     username: Application.get_env(:companion, :openhim)[:username],
     password: Application.get_env(:companion, :openhim)[:password]
 
+  plug Tesla.Middleware.Headers, [
+    {"user-agent", "nurseconnect-companion"}
+  ]
+
   plug Tesla.Middleware.JSON, engine: Poison
   plug Tesla.Middleware.Logger
 
@@ -32,5 +36,27 @@ defmodule CompanionWeb.Clients.OpenHIM do
   """
   def create_nurseconnect_optout(optout) do
     post!("ws/rest/v1/nc/optout", optout)
+  end
+
+  @doc """
+  Given the registration with the following data:
+
+  mha: integer
+  swt: integer
+  type: integer
+  cmsisdn: string, msisdn
+  dmsisdn: string, msisdn
+  rmsisdn: string, msisdn, optional
+  faccode: string, facility code
+  id: string, '{identifier}^^^{country}^{type}'
+  dob: string, date, optional
+  persal: string, optional
+  sanc: string, optional
+  encdate, string, date
+
+  Sends the optout to the OpenHIM API
+  """
+  def submit_nurseconnect_registration(registration) do
+    post!("ws/rest/v1/nc/subscription", registration)
   end
 end

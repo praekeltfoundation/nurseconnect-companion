@@ -43,7 +43,11 @@ defmodule Companion.Jobs.ProcessOptOutTests do
       %{
         method: :post,
         url: "http://openhim/ws/rest/v1/nc/optout",
-        headers: [{"authorization", "Basic dXNlcjpwYXNz"}, {"content-type", "application/json"}],
+        headers: [
+          {"authorization", "Basic dXNlcjpwYXNz"},
+          {"user-agent", "nurseconnect-companion"},
+          {"content-type", "application/json"}
+        ],
         body: @openhim_expected_request
       } ->
         %Tesla.Env{status: 202, body: "Accepted"}

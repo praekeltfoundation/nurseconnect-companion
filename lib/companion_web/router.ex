@@ -63,6 +63,7 @@ defmodule CompanionWeb.Router do
     pipe_through [:api, :authenticated]
 
     resources "/templatemessages", TemplateMessageController, only: [:create, :show]
+    resources "/registration", RegistrationController, only: [:create, :show]
   end
 
   scope "/api/docs" do
