@@ -24,7 +24,9 @@ defmodule Companion.Application do
       {Honeydew.EctoPollQueue, Jobs.ProcessOptOut.supervisor_config()},
       {Honeydew.Workers, [:process_opt_out, Jobs.ProcessOptOut]},
       {Honeydew.EctoPollQueue, Jobs.SendTemplateMessage.supervisor_config()},
-      {Honeydew.Workers, [:send_template_message, Jobs.SendTemplateMessage]}
+      {Honeydew.Workers, [:send_template_message, Jobs.SendTemplateMessage]},
+      {Honeydew.EctoPollQueue, Jobs.ProcessRegistration.supervisor_config()},
+      {Honeydew.Workers, [:process_registration, Jobs.ProcessRegistration]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
