@@ -31,7 +31,7 @@ defmodule Companion.Jobs.ProcessRegistrationTests do
           {"user-agent", "nurseconnect-companion"},
           {"content-type", "application/json"}
         ],
-        body: response
+        body: ^response
       } ->
         json(%{})
     end)
