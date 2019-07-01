@@ -10,7 +10,7 @@ defmodule Companion.Jobs.ProcessRegistrationTests do
     sanc: nil,
     rmsisdn: nil,
     persal: nil,
-    mha: 1,
+    mha: 6,
     id: "27820001001^^^ZAF^TEL",
     faccode: "123456",
     encdate: "20180101010101",

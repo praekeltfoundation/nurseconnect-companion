@@ -10,7 +10,7 @@ defmodule Companion.Jobs.ProcessRegistration do
   alias Companion.Repo
   alias CompanionWeb.Clients.OpenHIM
 
-  @mha_praekelt 1
+  @mha_praekelt 6 #  registration via whatsapp
   @swt_sms 1
   @swt_whatsapp 7
   @type_nurse_registration 7
