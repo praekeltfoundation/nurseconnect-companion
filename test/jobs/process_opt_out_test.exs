@@ -6,17 +6,17 @@ defmodule Companion.Jobs.ProcessOptOutTests do
   import Tesla.Mock
 
   @openhim_expected_request %{
-                              mha: 1,
-                              swt: 1,
-                              type: 8,
-                              cmsisdn: "+27821234567",
-                              dmsisdn: "+27820000000",
-                              faccode: "123456",
-                              id: "27821234567^^^ZAF^TEL",
-                              optoutreason: 6,
-                              encdate: "20180530151032",
-                              sid: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"
-                            }
+    mha: 1,
+    swt: 1,
+    type: 8,
+    cmsisdn: "+27821234567",
+    dmsisdn: "+27820000000",
+    faccode: "123456",
+    id: "27821234567^^^ZAF^TEL",
+    optoutreason: 6,
+    encdate: "20180530151032",
+    sid: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"
+  }
 
   @rapidpro_contact %{
     results: [
@@ -26,7 +26,7 @@ defmodule Companion.Jobs.ProcessOptOutTests do
           registered_by: "+27820000000",
           facility_code: "123456",
           opt_out_date: "2018-05-30T15:10:32.650440Z",
-          contact_id: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2",
+          contact_id: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"
         }
       }
     ]
@@ -34,6 +34,7 @@ defmodule Companion.Jobs.ProcessOptOutTests do
 
   defp mock_request(response) do
     body = Poison.encode!(response)
+
     mock(fn
       %{
         method: :get,

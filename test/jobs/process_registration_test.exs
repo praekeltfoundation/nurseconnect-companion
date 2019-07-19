@@ -24,34 +24,34 @@ defmodule Companion.Jobs.ProcessRegistrationTests do
 
   defp mock_request(response) do
     body = Poison.encode!(response)
-    mock(fn
-      %{
-        method: :post,
-        url: "http://openhim/ws/rest/v1/nc/subscription",
-        headers: [
-          {"authorization", "Basic dXNlcjpwYXNz"},
-          {"user-agent", "nurseconnect-companion"},
-          {"content-type", "application/json"}
-        ],
-        body: body
-      } ->
-        json(%{})
+
+    mock(fn %{
+              method: :post,
+              url: "http://openhim/ws/rest/v1/nc/subscription",
+              headers: [
+                {"authorization", "Basic dXNlcjpwYXNz"},
+                {"user-agent", "nurseconnect-companion"},
+                {"content-type", "application/json"}
+              ],
+              body: body
+            } ->
+      json(%{})
     end)
 
     response
   end
 
   test "Submits the WhatsApp registration" do
+    {:ok, registration} =
+      create_registration(%{
+        msisdn: "+27820001001",
+        registered_by: "+27820001002",
+        channel: "WhatsApp",
+        facility_code: "123456",
+        timestamp: "2018-01-01T01:01:01",
+        contact_id: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609"
+      })
 
-    {:ok, registration} = create_registration(%{
-          msisdn: "+27820001001",
-          registered_by: "+27820001002",
-          channel: "WhatsApp",
-          facility_code: "123456",
-          timestamp: "2018-01-01T01:01:01",
-          contact_id: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609",
-        })
-   
     reg_request = Map.put(@whatsapp_registration_request, :eid, registration.id)
     mock_request(reg_request)
 
@@ -60,7 +60,6 @@ defmodule Companion.Jobs.ProcessRegistrationTests do
   end
 
   test "Submits the SMS registration" do
-
     {:ok, registration} =
       create_registration(%{
         msisdn: "+27820001001",
@@ -68,9 +67,9 @@ defmodule Companion.Jobs.ProcessRegistrationTests do
         channel: "SMS",
         facility_code: "123456",
         timestamp: "2018-01-01T01:01:01",
-        contact_id: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609",
+        contact_id: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609"
       })
-    
+
     reg_request = Map.put(@sms_registration_request, :eid, registration.id)
     mock_request(reg_request)
 

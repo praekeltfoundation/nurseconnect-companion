@@ -25,10 +25,10 @@ defmodule CompanionWeb.RegistrationController do
             sanc(:string, "SANC code of person registered", required: false)
 
             contact_id(
-                    :string,
-                    "UUID of the contact that requested the opt out",
-                    required: true,
-                    format: :uuid
+              :string,
+              "UUID of the contact that requested the opt out",
+              required: true,
+              format: :uuid
             )
 
             timestamp(
