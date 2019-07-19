@@ -42,13 +42,14 @@ defmodule Companion.Jobs.ProcessOptOut do
     msisdn <> "^^^ZAF^TEL"
   end
 
-  defp openhim_optout_from_contact(contact) do
+  defp openhim_optout_from_contact(contact, id) do
     %{
       "urns" => [nurse_urn | _],
       "fields" => %{
         "opt_out_date" => opt_out_date,
         "registered_by" => device_msisdn,
-        "facility_code" => facility_code
+        "facility_code" => facility_code,
+        "contact_id" => contact_id
       }
     } = contact
 
@@ -58,6 +59,8 @@ defmodule Companion.Jobs.ProcessOptOut do
       type: @type_nurse_optout,
       cmsisdn: extract_number_from_urn(nurse_urn),
       dmsisdn: device_msisdn,
+      eid: id,
+      sid: contact_id,
       faccode: facility_code,
       id: urn_to_identifier(nurse_urn),
       optoutreason: @reason_unknown,
@@ -74,7 +77,7 @@ defmodule Companion.Jobs.ProcessOptOut do
       |> get_opt_out!()
       |> Map.get(:contact_id)
       |> Rapidpro.get_contact()
-      |> openhim_optout_from_contact()
+      |> openhim_optout_from_contact(id)
       |> OpenHIM.create_nurseconnect_optout()
 
     set_optout_status(id, :complete)

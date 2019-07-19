@@ -44,7 +44,7 @@ defmodule Companion.Jobs.ProcessRegistration do
     msisdn <> "^^^ZAF^TEL"
   end
 
-  defp openhim_registration_from_registration(registration) do
+  defp openhim_registration_from_registration(registration, id) do
     %{
       mha: @mha_praekelt,
       swt: swt_from_channel(registration.channel),
@@ -52,6 +52,8 @@ defmodule Companion.Jobs.ProcessRegistration do
       dmsisdn: registration.registered_by,
       cmsisdn: registration.msisdn,
       rmsisdn: nil,
+      eid: id,
+      sid: registration.contact_id,
       faccode: registration.facility_code,
       id: id_from_msisdn(registration.msisdn),
       dob: nil,
@@ -67,7 +69,7 @@ defmodule Companion.Jobs.ProcessRegistration do
     _ =
       id
       |> get_registration!()
-      |> openhim_registration_from_registration()
+      |> openhim_registration_from_registration(id)
       |> OpenHIM.submit_nurseconnect_registration()
   end
 end

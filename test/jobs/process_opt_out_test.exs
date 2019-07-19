@@ -5,7 +5,7 @@ defmodule Companion.Jobs.ProcessOptOutTests do
   alias Companion.Jobs.ProcessOptOut
   import Tesla.Mock
 
-  @openhim_expected_request Poison.encode!(%{
+  @openhim_expected_request %{
                               mha: 1,
                               swt: 1,
                               type: 8,
@@ -14,8 +14,9 @@ defmodule Companion.Jobs.ProcessOptOutTests do
                               faccode: "123456",
                               id: "27821234567^^^ZAF^TEL",
                               optoutreason: 6,
-                              encdate: "20180530151032"
-                            })
+                              encdate: "20180530151032",
+                              sid: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"
+                            }
 
   @rapidpro_contact %{
     results: [
@@ -24,13 +25,15 @@ defmodule Companion.Jobs.ProcessOptOutTests do
         fields: %{
           registered_by: "+27820000000",
           facility_code: "123456",
-          opt_out_date: "2018-05-30T15:10:32.650440Z"
+          opt_out_date: "2018-05-30T15:10:32.650440Z",
+          contact_id: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2",
         }
       }
     ]
   }
 
-  setup do
+  defp mock_request(response) do
+    body = Poison.encode!(response)
     mock(fn
       %{
         method: :get,
@@ -48,16 +51,18 @@ defmodule Companion.Jobs.ProcessOptOutTests do
           {"user-agent", "nurseconnect-companion"},
           {"content-type", "application/json"}
         ],
-        body: @openhim_expected_request
+        body: body
       } ->
-        %Tesla.Env{status: 202, body: "Accepted"}
+        json(%{})
     end)
 
-    :ok
+    response
   end
 
   test "sends opt out to OpenHIM" do
     {:ok, optout} = create_opt_out(%{contact_id: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"})
+    reg_request = Map.put(@openhim_expected_request, :eid, optout.id)
+    mock_request(reg_request)
     ProcessOptOut.run(optout.id)
     optout = get_opt_out!(optout.id)
     assert optout.status == 1
