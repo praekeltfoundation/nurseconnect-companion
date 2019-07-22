@@ -52,7 +52,7 @@ defmodule Companion.Jobs.ProcessRegistration do
       dmsisdn: registration.registered_by,
       cmsisdn: registration.msisdn,
       rmsisdn: nil,
-      eid: id,
+      eid: Ecto.UUID.cast!(<<id::128>>),
       sid: registration.contact_id,
       faccode: registration.facility_code,
       id: id_from_msisdn(registration.msisdn),

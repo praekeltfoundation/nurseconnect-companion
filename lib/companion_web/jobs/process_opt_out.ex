@@ -49,7 +49,7 @@ defmodule Companion.Jobs.ProcessOptOut do
         "opt_out_date" => opt_out_date,
         "registered_by" => device_msisdn,
         "facility_code" => facility_code,
-        "contact_id" => contact_id
+        "uuid" => uuid
       }
     } = contact
 
@@ -59,8 +59,8 @@ defmodule Companion.Jobs.ProcessOptOut do
       type: @type_nurse_optout,
       cmsisdn: extract_number_from_urn(nurse_urn),
       dmsisdn: device_msisdn,
-      eid: id,
-      sid: contact_id,
+      eid: Ecto.UUID.cast!(<<id::128>>),
+      sid: uuid,
       faccode: facility_code,
       id: urn_to_identifier(nurse_urn),
       optoutreason: @reason_unknown,

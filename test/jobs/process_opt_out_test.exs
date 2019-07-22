@@ -26,7 +26,7 @@ defmodule Companion.Jobs.ProcessOptOutTests do
           registered_by: "+27820000000",
           facility_code: "123456",
           opt_out_date: "2018-05-30T15:10:32.650440Z",
-          contact_id: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"
+          uuid: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"
         }
       }
     ]
