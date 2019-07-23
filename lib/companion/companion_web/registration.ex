@@ -13,6 +13,7 @@ defmodule Companion.CompanionWeb.Registration do
     field(:persal, :string)
     field(:registered_by, :string)
     field(:sanc, :string)
+    field(:contact_id, :string)
     field(:timestamp, :utc_datetime)
 
     timestamps()
@@ -30,6 +31,7 @@ defmodule Companion.CompanionWeb.Registration do
       :facility_code,
       :persal,
       :sanc,
+      :contact_id,
       :timestamp
     ])
     |> validate_required([:msisdn, :registered_by, :channel, :facility_code, :timestamp])

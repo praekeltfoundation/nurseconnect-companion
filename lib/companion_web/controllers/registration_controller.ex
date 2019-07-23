@@ -24,6 +24,13 @@ defmodule CompanionWeb.RegistrationController do
             persal(:string, "Persal code of person registered", required: false)
             sanc(:string, "SANC code of person registered", required: false)
 
+            contact_id(
+              :string,
+              "UUID of the contact that requested the opt out",
+              required: true,
+              format: :uuid
+            )
+
             timestamp(
               :string,
               "UTC timestamp of when the registration occurred",
@@ -36,6 +43,7 @@ defmodule CompanionWeb.RegistrationController do
             facility_code: "123456",
             msisdn: "+27820001001",
             registered_by: "+27820001002",
+            contact_id: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609",
             timestamp: "2018-01-01T01:01:01"
           })
         end

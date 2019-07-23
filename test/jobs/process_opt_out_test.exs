@@ -5,22 +5,24 @@ defmodule Companion.Jobs.ProcessOptOutTests do
   alias Companion.Jobs.ProcessOptOut
   import Tesla.Mock
 
-  @openhim_expected_request Poison.encode!(%{
-                              mha: 1,
-                              swt: 1,
-                              type: 8,
-                              cmsisdn: "+27821234567",
-                              dmsisdn: "+27820000000",
-                              faccode: "123456",
-                              id: "27821234567^^^ZAF^TEL",
-                              optoutreason: 6,
-                              encdate: "20180530151032"
-                            })
+  @openhim_expected_request %{
+    mha: 1,
+    swt: 1,
+    type: 8,
+    cmsisdn: "+27821234567",
+    dmsisdn: "+27820000000",
+    faccode: "123456",
+    id: "27821234567^^^ZAF^TEL",
+    optoutreason: 6,
+    encdate: "20180530151032",
+    sid: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"
+  }
 
   @rapidpro_contact %{
     results: [
       %{
         urns: ["tel:+27821234567"],
+        uuid: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2",
         fields: %{
           registered_by: "+27820000000",
           facility_code: "123456",
@@ -30,8 +32,10 @@ defmodule Companion.Jobs.ProcessOptOutTests do
     ]
   }
 
-  setup do
-    mock(fn
+  defp mock_request(response) do
+    body = Poison.encode!(response)
+
+    Tesla.Mock.mock(fn
       %{
         method: :get,
         url: "http://rapidpro/api/v2/contacts.json",
@@ -48,16 +52,18 @@ defmodule Companion.Jobs.ProcessOptOutTests do
           {"user-agent", "nurseconnect-companion"},
           {"content-type", "application/json"}
         ],
-        body: @openhim_expected_request
+        body: ^body
       } ->
-        %Tesla.Env{status: 202, body: "Accepted"}
+        json(%{})
     end)
 
-    :ok
+    response
   end
 
   test "sends opt out to OpenHIM" do
     {:ok, optout} = create_opt_out(%{contact_id: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"})
+    reg_request = Map.put(@openhim_expected_request, :eid, Ecto.UUID.cast!(<<optout.id::128>>))
+    mock_request(reg_request)
     ProcessOptOut.run(optout.id)
     optout = get_opt_out!(optout.id)
     assert optout.status == 1
