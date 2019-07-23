@@ -22,11 +22,11 @@ defmodule Companion.Jobs.ProcessOptOutTests do
     results: [
       %{
         urns: ["tel:+27821234567"],
+        uuid: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2",
         fields: %{
           registered_by: "+27820000000",
           facility_code: "123456",
-          opt_out_date: "2018-05-30T15:10:32.650440Z",
-          uuid: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"
+          opt_out_date: "2018-05-30T15:10:32.650440Z"
         }
       }
     ]
@@ -35,7 +35,7 @@ defmodule Companion.Jobs.ProcessOptOutTests do
   defp mock_request(response) do
     body = Poison.encode!(response)
 
-    mock(fn
+    Tesla.Mock.mock(fn
       %{
         method: :get,
         url: "http://rapidpro/api/v2/contacts.json",
@@ -52,7 +52,7 @@ defmodule Companion.Jobs.ProcessOptOutTests do
           {"user-agent", "nurseconnect-companion"},
           {"content-type", "application/json"}
         ],
-        body: body
+        body: ^body
       } ->
         json(%{})
     end)
@@ -62,7 +62,7 @@ defmodule Companion.Jobs.ProcessOptOutTests do
 
   test "sends opt out to OpenHIM" do
     {:ok, optout} = create_opt_out(%{contact_id: "a49fddb7-cde0-4d3a-aa24-33ecc826f0d2"})
-    reg_request = Map.put(@openhim_expected_request, :eid, optout.id)
+    reg_request = Map.put(@openhim_expected_request, :eid, Ecto.UUID.cast!(<<optout.id::128>>))
     mock_request(reg_request)
     ProcessOptOut.run(optout.id)
     optout = get_opt_out!(optout.id)

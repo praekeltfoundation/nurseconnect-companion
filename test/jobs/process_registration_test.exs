@@ -33,7 +33,7 @@ defmodule Companion.Jobs.ProcessRegistrationTests do
                 {"user-agent", "nurseconnect-companion"},
                 {"content-type", "application/json"}
               ],
-              body: body
+              body: ^body
             } ->
       json(%{})
     end)
@@ -52,7 +52,9 @@ defmodule Companion.Jobs.ProcessRegistrationTests do
         contact_id: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609"
       })
 
-    reg_request = Map.put(@whatsapp_registration_request, :eid, registration.id)
+    reg_request =
+      Map.put(@whatsapp_registration_request, :eid, Ecto.UUID.cast!(<<registration.id::128>>))
+
     mock_request(reg_request)
 
     ProcessRegistration.run(registration.id)
@@ -70,7 +72,9 @@ defmodule Companion.Jobs.ProcessRegistrationTests do
         contact_id: "cdffd588-dc29-469d-b2ac-3a0c2d5d8609"
       })
 
-    reg_request = Map.put(@sms_registration_request, :eid, registration.id)
+    reg_request =
+      Map.put(@sms_registration_request, :eid, Ecto.UUID.cast!(<<registration.id::128>>))
+
     mock_request(reg_request)
 
     ProcessRegistration.run(registration.id)

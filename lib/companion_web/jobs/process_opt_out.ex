@@ -45,11 +45,11 @@ defmodule Companion.Jobs.ProcessOptOut do
   defp openhim_optout_from_contact(contact, id) do
     %{
       "urns" => [nurse_urn | _],
+      "uuid" => uuid,
       "fields" => %{
         "opt_out_date" => opt_out_date,
         "registered_by" => device_msisdn,
-        "facility_code" => facility_code,
-        "uuid" => uuid
+        "facility_code" => facility_code
       }
     } = contact
 
